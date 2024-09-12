@@ -2,14 +2,21 @@
 
 namespace Agenda.Domain.Entities;
 
-public sealed class Catalog(CatalogDescription description) : Entity
+public sealed class Catalog : Entity
 {
-    private CatalogDescription? Description { get; set; } = description;
+    private CatalogDescription? Description { get; set; }
 
-    public void Update(long id, CatalogDescription description)
+    public Catalog(CatalogDescription description)
+    {
+        Description = description;
+        CreatedAt = DateTimeOffset.Now;
+    }
+
+    public void Update(long id, CatalogDescription newDescription)
     {
         Id = id;
-        Description = description;
+        Description = newDescription;
+        UpdatedAt = DateTimeOffset.Now;
     }
 
     public string? GetName => Description?.Name;

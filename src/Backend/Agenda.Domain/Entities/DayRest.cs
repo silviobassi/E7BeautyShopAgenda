@@ -4,26 +4,20 @@ public sealed class DayRest : Entity
 {
     public DayOfWeek? DayOnWeek { get; private set; }
 
-    public long AgendaId { get; private set; }
-
     public DayRest()
     {
     }
 
-    public DayRest(DayOfWeek dayOnWeek, long agendaId)
+    public DayRest(DayOfWeek dayOnWeek)
     {
-        CreatedAt = DateTime.Now;
-        UpdatedAt = DateTime.Now;
         DayOnWeek = dayOnWeek;
-        AgendaId = agendaId;
+        CreatedAt = DateTime.Now;
     }
 
-    public void Update(long id, DayOfWeek dayOnWeek, long agendaId)
+    public void Update(long id, DayOfWeek dayOnWeek)
     {
         Id = id;
-        CreatedAt = DateTime.Now;
-        UpdatedAt = DateTime.Now;
         DayOnWeek = dayOnWeek;
-        AgendaId = agendaId;
+        UpdatedAt = DateTime.Now;
     }
 }

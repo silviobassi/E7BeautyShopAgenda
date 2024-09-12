@@ -15,6 +15,7 @@ public class CatalogTest
         Catalog catalog = new(description);
 
         catalog.Should().NotBeNull();
+        catalog.CreatedAt.Should().BeAfter(DateTimeOffset.MinValue);
         catalog.GetName.Should().Be(description.Name);
         catalog.GetPrice.Should().Be(description.Price);
     }
@@ -25,11 +26,7 @@ public class CatalogTest
         var (id, description) = CatalogBuilder.Build();
         
         Catalog catalog = new(description);
-
-        catalog.Should().NotBeNull();
-        catalog.GetName.Should().Be(description.Name);
-        catalog.GetPrice.Should().Be(description.Price);
-
+        
         const string corteDeCabeloSobrancelhaBarba = "Corte de Cabelo + sobrancelha + Barba";
         const int expectedPrice = 100;
         
@@ -37,6 +34,8 @@ public class CatalogTest
         
         catalog.Should().NotBeNull();
 
+        catalog.CreatedAt.Should().NotBeNull();
+        catalog.UpdatedAt.Should().NotBeNull();
         catalog.GetName.Should().NotBe(description.Name);
         catalog.GetPrice.Should().NotBe(description.Price);
         catalog.GetName.Should().Be(corteDeCabeloSobrancelhaBarba);
