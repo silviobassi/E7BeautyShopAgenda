@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Test.CommonUtilities</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Bogus" Version="35.6.0" />
+        <PackageReference Include="Moq" Version="4.20.70" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Backend\Agenda.Infrastructure\Agenda.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\src\Shared\Agenda.Communication\Agenda.Communication.csproj" />
+    </ItemGroup>
+</Project>
