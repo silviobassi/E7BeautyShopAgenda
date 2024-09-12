@@ -9,9 +9,9 @@ public class BusinessHourTest
     [Fact]
     public void Should_CreatingBusinessHourInstance()
     {
-        var (_, startAt, endAt, duration) = BusinessHourBuilder.Build();
+        var (_, startAt, endAt, duration, professionalId) = BusinessHourBuilder.Build();
 
-        BusinessHour businessHour = new(startAt, endAt, duration);
+        BusinessHour businessHour = new(startAt, endAt, duration, professionalId);
 
         businessHour.CreatedAt.Should().NotBeNull();
         businessHour.StartAt.Should().Be(startAt);
@@ -24,15 +24,15 @@ public class BusinessHourTest
     [Fact]
     public void Should_UpdateBusinessHourInstance()
     {
-        var (id, startAt, endAt, duration) = BusinessHourBuilder.Build();
+        var (id, startAt, endAt, duration, professionalId) = BusinessHourBuilder.Build();
 
-        BusinessHour businessHour = new(startAt, endAt, duration);
+        BusinessHour businessHour = new(startAt, endAt, duration,professionalId);
 
         var newStartAt = startAt.AddDays(1);
         var newEndAt = endAt.AddDays(1);
         const int newDuration = 45;
 
-        businessHour.Update(id, newStartAt, newEndAt, newDuration);
+        businessHour.Update(id, newStartAt, newEndAt, newDuration,professionalId);
 
         businessHour.CreatedAt.Should().NotBeNull();
         businessHour.UpdatedAt.Should().NotBeNull();
@@ -46,9 +46,9 @@ public class BusinessHourTest
     [Fact]
     public void Should_MakeUnavailableBusinessHour()
     {
-        var (_, startAt, endAt, duration) = BusinessHourBuilder.Build();
+        var (_, startAt, endAt, duration, professionalId) = BusinessHourBuilder.Build();
 
-        BusinessHour businessHour = new(startAt, endAt, duration);
+        BusinessHour businessHour = new(startAt, endAt, duration, professionalId);
 
         businessHour.ToggleAvailability();
         
@@ -58,9 +58,9 @@ public class BusinessHourTest
     [Fact]
     public void Should_MakeAvailableBusinessHour()
     {
-        var (_, startAt, endAt, duration) = BusinessHourBuilder.Build();
+        var (_, startAt, endAt, duration, professionalId) = BusinessHourBuilder.Build();
 
-        BusinessHour businessHour = new(startAt, endAt, duration);
+        BusinessHour businessHour = new(startAt, endAt, duration, professionalId);
 
         businessHour.ToggleAvailability();
         businessHour.ToggleAvailability();
