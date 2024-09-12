@@ -8,25 +8,26 @@ public class BusinessHour
     public bool Active { get; private set; }
     public bool Available { get; private set; }
     public int Duration { get; private set; }
-    public BusinessHour(DateTimeOffset startAt, DateTimeOffset endAt, bool active, bool available, int duration)
+
+    public BusinessHour(DateTimeOffset startAt, DateTimeOffset endAt, int duration)
     {
         StartAt = startAt;
         EndAt = endAt;
-        Active = active;
-        Available = available;
+        Active = true;
+        Available = true;
         Duration = duration;
         CreatedAt = DateTimeOffset.Now;
     }
 
-    public void Update(long id, DateTimeOffset newStartAt, DateTimeOffset newEndAt, bool newActive, bool newAvailable,
+    public void Update(long id, DateTimeOffset newStartAt, DateTimeOffset newEndAt,
         int newDuration)
     {
         Id = id;
         StartAt = newStartAt;
         EndAt = newEndAt;
-        Active = newActive;
-        Available = newAvailable;
         Duration = newDuration;
         UpdatedAt = DateTimeOffset.Now;
     }
+
+    public void ToggleAvailability() => Available = !Available;
 }
