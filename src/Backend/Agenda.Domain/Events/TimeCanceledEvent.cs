@@ -1,9 +1,7 @@
 ﻿namespace Agenda.Domain.Events;
 
-public class TimeCanceledEvent : TimeEvent
+public class TimeCanceledEvent(DateTimeOffset startAt, int duration, long clientId, string reason) : TimeEvent(startAt,
+    duration, clientId)
 {
-    public string Reason { get; private set; }
-
-    internal TimeCanceledEvent(DateTimeOffset startAt, int duration, long clientId, string reason) : base(startAt,
-        duration, clientId) => Reason = reason;
+    public string Reason { get; private set; } = reason;
 }

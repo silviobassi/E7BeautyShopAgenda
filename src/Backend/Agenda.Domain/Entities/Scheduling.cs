@@ -1,6 +1,5 @@
 ﻿using Agenda.Domain.Errors;
 using Agenda.Domain.Events;
-
 using static Agenda.Domain.Errors.ErrorMessages;
 
 namespace Agenda.Domain.Entities;
@@ -33,37 +32,43 @@ public class Scheduling : Entity
         UpdatedAt = DateTimeOffset.UtcNow;
     }
 
-    public Result Schedule(long clientId)
+    public Result Schedule(TimeReservedEvent timeReservedEvent, long clientId)
     {
-        if (IsClient) return Result.Fail(ClientScheduledMessage, ClientScheduledCode);
-        ClientId = clientId;
-        Available = false;
-        var timeReserved = this.EmitReservedTimeEvent(new TimeReservedEvent(AppointmentHours, Duration, ClientId));
-        _domainEvents.Add(timeReserved);
+        if (IsClientSchedule) return Result.Fail(ClientScheduledMessage, ClientScheduledCode);
+        UpdateStateSchedule(clientId: clientId, available: false);
+        RegisterEvent(timeReservedEvent);
         return Result.Ok();
     }
 
-    public Result Cancel()
+    public Result Cancel(TimeCanceledEvent timeCanceledEvent)
     {
-        if (IsNotClient) return Result.Fail(NoClientScheduledMessage, NoClientScheduledCode);
+        if (IsNotClientSchedule) return Result.Fail(NoClientScheduledMessage, NoClientScheduledCode);
 
         if (IsLessThanTwoHoursBefore)
             return Result.Fail(LessThanTwoHoursBeforeMessage, LessThanTwoHoursBeforeCode);
 
-        const string reason = "Cliente cancelou o horário por motivos pessoais";
-        Available = true;
-        ClientId = 0L;
-        var timeCanceled = this.EmitReservedTimeEvent(new TimeCanceledEvent(AppointmentHours, Duration, ClientId, reason));
-        _domainEvents.Add(timeCanceled);
+        UpdateStateSchedule();
+        RegisterEvent(timeCanceledEvent);
         return Result.Ok();
     }
 
-
     public void ClearDomainEvents() => _domainEvents.Clear();
 
-    private bool IsClient => ClientId > 0L;
+    private bool IsClientSchedule => ClientId > 0L;
 
-    private bool IsNotClient => !IsClient;
+    private bool IsNotClientSchedule => !IsClientSchedule;
 
     private bool IsLessThanTwoHoursBefore => AppointmentHours.Subtract(DateTimeOffset.UtcNow).TotalHours < 2;
+
+    private void UpdateStateSchedule(long clientId = 0L, bool available = true)
+    {
+        ClientId = clientId;
+        Available = available;
+    }
+    
+    private void RegisterEvent(IDomainEvent domainEvent)
+    {
+        var timeReserved = this.EmitEvent(domainEvent);
+        _domainEvents.Add(timeReserved);
+    }
 }
