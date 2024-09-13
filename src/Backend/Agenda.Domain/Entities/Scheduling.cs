@@ -35,7 +35,7 @@ public class Scheduling : Entity
 
     public Result Schedule(long clientId)
     {
-        if (IsClient) return Result.Fail(ThereIsClientScheduledMessage, ThereIsClientScheduledCode);
+        if (IsClient) return Result.Fail(ClientScheduledMessage, ClientScheduledCode);
         ClientId = clientId;
         Available = false;
         var timeReserved = this.EmitReservedTimeEvent(new TimeReservedEvent(AppointmentHours, Duration, ClientId));

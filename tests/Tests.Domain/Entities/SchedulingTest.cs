@@ -130,8 +130,8 @@ public class SchedulingTest
 
         scheduling.Available.Should().BeFalse();
         scheduling.ClientId.Should().Be(clientId);
-        result.Message.Should().Be(ThereIsClientScheduledMessage);
-        result.ErrorCode.Should().Be(ThereIsClientScheduledCode);
+        result.Message.Should().Be(ClientScheduledMessage);
+        result.ErrorCode.Should().Be(ClientScheduledCode);
     }
     
     [Fact]
