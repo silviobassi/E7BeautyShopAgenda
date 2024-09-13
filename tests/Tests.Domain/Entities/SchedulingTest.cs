@@ -1,6 +1,7 @@
 ﻿using Agenda.Domain.Entities;
 using FluentAssertions;
 using Test.CommonUtilities.Entities;
+using static Agenda.Domain.Errors.ErrorMessages;
 
 namespace Tests.Domain.Entities;
 
@@ -79,8 +80,8 @@ public class SchedulingTest
         
         scheduling.Available.Should().BeFalse();
         scheduling.ClientId.Should().Be(clientId);
-        result.Message.Should().Be("O horário não pode ser cancelado com menos de 2 horas de antecedência");
-        result.ErrorCode.Should().Be(3);
+        result.Message.Should().Be(LessThanTwoHoursBeforeMessage);
+        result.ErrorCode.Should().Be(LessThanTwoHoursBeforeCode);
     }
     
     [Fact]
@@ -94,8 +95,8 @@ public class SchedulingTest
 
         scheduling.Available.Should().BeTrue();
         scheduling.ClientId.Should().Be(0);
-        result.Message.Should().Be("Não há um cliente agendado para este horário");
-        result.ErrorCode.Should().Be(2);
+        result.Message.Should().Be(NoClientScheduledMessage);
+        result.ErrorCode.Should().Be(NoClientScheduledCode);
     }
 
     [Fact]
@@ -129,8 +130,8 @@ public class SchedulingTest
 
         scheduling.Available.Should().BeFalse();
         scheduling.ClientId.Should().Be(clientId);
-        result.Message.Should().Be("Há um cliente agendado para este horário");
-        result.ErrorCode.Should().Be(1);
+        result.Message.Should().Be(ThereIsClientScheduledMessage);
+        result.ErrorCode.Should().Be(ThereIsClientScheduledCode);
     }
     
     [Fact]

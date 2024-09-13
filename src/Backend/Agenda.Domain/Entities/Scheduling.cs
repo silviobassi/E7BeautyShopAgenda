@@ -1,6 +1,8 @@
 ﻿using Agenda.Domain.Errors;
 using Agenda.Domain.Events;
 
+using static Agenda.Domain.Errors.ErrorMessages;
+
 namespace Agenda.Domain.Entities;
 
 public class Scheduling : Entity
@@ -33,7 +35,7 @@ public class Scheduling : Entity
 
     public Result Schedule(long clientId)
     {
-        if (IsClient) return Result.Fail("Há um cliente agendado para este horário", 1);
+        if (IsClient) return Result.Fail(ThereIsClientScheduledMessage, ThereIsClientScheduledCode);
         ClientId = clientId;
         Available = false;
         var timeReserved = this.EmitReservedTimeEvent(new TimeReservedEvent(AppointmentHours, Duration, ClientId));
@@ -43,10 +45,10 @@ public class Scheduling : Entity
 
     public Result Cancel()
     {
-        if (IsNotClient) return Result.Fail("Não há um cliente agendado para este horário", 2);
+        if (IsNotClient) return Result.Fail(NoClientScheduledMessage, NoClientScheduledCode);
 
         if (IsLessThanTwoHoursBefore)
-            return Result.Fail("O horário não pode ser cancelado com menos de 2 horas de antecedência", 3);
+            return Result.Fail(LessThanTwoHoursBeforeMessage, LessThanTwoHoursBeforeCode);
 
         const string reason = "Cliente cancelou o horário por motivos pessoais";
         Available = true;
