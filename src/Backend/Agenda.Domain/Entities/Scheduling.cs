@@ -3,10 +3,9 @@ using Agenda.Domain.Events;
 
 namespace Agenda.Domain.Entities;
 
-public class BusinessHour : Entity
+public class Scheduling : Entity
 {
-    public DateTimeOffset StartAt { get; private set; }
-    public DateTimeOffset EndAt { get; private set; }
+    public DateTimeOffset AppointmentHours { get; private set; }
     public bool Active { get; private set; }
     public bool Available { get; private set; }
     public int Duration { get; private set; }
@@ -15,22 +14,19 @@ public class BusinessHour : Entity
     private readonly List<IDomainEvent> _domainEvents = [];
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
-    public BusinessHour(DateTimeOffset startAt, DateTimeOffset endAt, int duration)
+    public Scheduling(DateTimeOffset appointmentHours, int duration)
     {
-        StartAt = startAt;
-        EndAt = endAt;
+        AppointmentHours = appointmentHours;
         Active = true;
         Available = true;
         Duration = duration;
         CreatedAt = DateTimeOffset.UtcNow;
     }
 
-    public void Update(long id, DateTimeOffset newStartAt, DateTimeOffset newEndAt,
-        int newDuration)
+    public void Update(long id, DateTimeOffset newStartAt, int newDuration)
     {
         Id = id;
-        StartAt = newStartAt;
-        EndAt = newEndAt;
+        AppointmentHours = newStartAt;
         Duration = newDuration;
         UpdatedAt = DateTimeOffset.UtcNow;
     }
@@ -40,7 +36,7 @@ public class BusinessHour : Entity
         if (IsClient) return Result.Fail("Há um cliente agendado para este horário", 1);
         ClientId = clientId;
         Available = false;
-        var timeReserved = this.EmitReservedTimeEvent(new TimeReservedEvent(StartAt, Duration, ClientId));
+        var timeReserved = this.EmitReservedTimeEvent(new TimeReservedEvent(AppointmentHours, Duration, ClientId));
         _domainEvents.Add(timeReserved);
         return Result.Ok();
     }
@@ -55,7 +51,7 @@ public class BusinessHour : Entity
         const string reason = "Cliente cancelou o horário por motivos pessoais";
         Available = true;
         ClientId = 0L;
-        var timeCanceled = this.EmitReservedTimeEvent(new TimeCanceledEvent(StartAt, Duration, ClientId, reason));
+        var timeCanceled = this.EmitReservedTimeEvent(new TimeCanceledEvent(AppointmentHours, Duration, ClientId, reason));
         _domainEvents.Add(timeCanceled);
         return Result.Ok();
     }
@@ -67,5 +63,5 @@ public class BusinessHour : Entity
 
     private bool IsNotClient => !IsClient;
 
-    private bool IsLessThanTwoHoursBefore => StartAt.Subtract(DateTimeOffset.UtcNow).TotalHours < 2;
+    private bool IsLessThanTwoHoursBefore => AppointmentHours.Subtract(DateTimeOffset.UtcNow).TotalHours < 2;
 }
