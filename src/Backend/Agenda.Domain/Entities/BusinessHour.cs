@@ -49,9 +49,9 @@ public class BusinessHour : Entity
     {
         if (IsNotClient) return Result.Fail("Não há um cliente agendado para este horário", 2);
 
-        if (IsLessThanTwoHoursBefore())
+        if (IsLessThanTwoHoursBefore)
             return Result.Fail("O horário não pode ser cancelado com menos de 2 horas de antecedência", 3);
-        
+
         const string reason = "Cliente cancelou o horário por motivos pessoais";
         Available = true;
         ClientId = 0L;
@@ -67,13 +67,5 @@ public class BusinessHour : Entity
 
     private bool IsNotClient => !IsClient;
 
-    private bool IsLessThanTwoHoursBefore()
-    {
-        var hourSchedule = StartAt;
-        var currentHour = DateTimeOffset.UtcNow;
-
-        var totalHours = hourSchedule.Subtract(currentHour).TotalHours;
-        var twoHoursBefore = totalHours < 2;
-        return twoHoursBefore;
-    }
+    private bool IsLessThanTwoHoursBefore => StartAt.Subtract(DateTimeOffset.UtcNow).TotalHours < 2;
 }
