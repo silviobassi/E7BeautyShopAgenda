@@ -9,9 +9,9 @@ public class BusinessHourTest
     [Fact]
     public void Should_CreatingBusinessHourInstance()
     {
-        var (_, startAt, endAt, duration, professionalId) = BusinessHourBuilder.Build();
+        var (_, startAt, endAt, duration) = BusinessHourBuilder.Build();
 
-        BusinessHour businessHour = new(startAt, endAt, duration, professionalId);
+        BusinessHour businessHour = new(startAt, endAt, duration);
 
         businessHour.CreatedAt.Should().NotBeNull();
         businessHour.StartAt.Should().Be(startAt);
@@ -24,15 +24,15 @@ public class BusinessHourTest
     [Fact]
     public void Should_UpdateBusinessHourInstance()
     {
-        var (id, startAt, endAt, duration, professionalId) = BusinessHourBuilder.Build();
+        var (id, startAt, endAt, duration) = BusinessHourBuilder.Build();
 
-        BusinessHour businessHour = new(startAt, endAt, duration, professionalId);
+        BusinessHour businessHour = new(startAt, endAt, duration);
 
         var newStartAt = startAt.AddDays(1);
         var newEndAt = endAt.AddDays(1);
         const int newDuration = 45;
 
-        businessHour.Update(id, newStartAt, newEndAt, newDuration, professionalId);
+        businessHour.Update(id, newStartAt, newEndAt, newDuration);
 
         businessHour.CreatedAt.Should().NotBeNull();
         businessHour.UpdatedAt.Should().NotBeNull();
@@ -44,55 +44,113 @@ public class BusinessHourTest
     }
 
     [Fact]
-    public void Should_CancelBusinessHour()
+    public void Should_Success_CancelBusinessHour()
     {
-        var (_, startAt, endAt, duration, professionalId) = BusinessHourBuilder.Build();
-        const int clientId = 1;
-
-        BusinessHour businessHour = new(startAt, endAt, duration, professionalId);
+        var (_, _, endAt, duration) = BusinessHourBuilder.Build();
+        const long clientId = 1L;
+        
+        var twoHoursAfter = DateTimeOffset.UtcNow.AddMinutes(121);
+        
+        BusinessHour businessHour = new(twoHoursAfter, endAt, duration);
 
         businessHour.Schedule(clientId);
 
         businessHour.ClientId.Should().Be(clientId);
 
         businessHour.Cancel();
+        
+        businessHour.Available.Should().BeTrue();
+        businessHour.ClientId.Should().Be(0);
+        businessHour.DomainEvents.Should().HaveCount(2);
+    }
+    
+    
+    [Fact]
+    public void Should_Fail_CancelBusinessHour_When_ThereIsNo_Scheduling()
+    {
+        var (_, _, endAt, duration) = BusinessHourBuilder.Build();
+        const long clientId = 1L;
+        var twoHoursAfter = DateTimeOffset.UtcNow.AddMinutes(120);
+        
+        BusinessHour businessHour = new(twoHoursAfter, endAt, duration);
 
+        businessHour.Schedule(clientId);
+
+        businessHour.ClientId.Should().Be(clientId);
+
+        var result = businessHour.Cancel();
+        
         businessHour.Available.Should().BeFalse();
-        businessHour.ClientId.Should().BeGreaterThan(0);
+        businessHour.ClientId.Should().Be(clientId);
+        result.Message.Should().Be("O horário não pode ser cancelado com menos de 2 horas de antecedência");
+        result.ErrorCode.Should().Be(3);
+    }
+    
+    [Fact]
+    public void Should_Fail_CancelBusinessHour_When_ThereIsNoTimeForTolerance()
+    {
+        var (_, startAt, endAt, duration) = BusinessHourBuilder.Build();
+        
+        BusinessHour businessHour = new(startAt, endAt, duration);
+
+        var result = businessHour.Cancel();
+
+        businessHour.Available.Should().BeTrue();
+        businessHour.ClientId.Should().Be(0);
+        result.Message.Should().Be("Não há um cliente agendado para este horário");
+        result.ErrorCode.Should().Be(2);
     }
 
     [Fact]
-    public void Should_Success_To_ScheduleBusinessHour()
+    public void Should_Success_ScheduleBusinessHour()
     {
-        var (_, startAt, endAt, duration, professionalId) = BusinessHourBuilder.Build();
-        const int clientId = 1;
+        var (_, startAt, endAt, duration) = BusinessHourBuilder.Build();
+        const long clientId = 1L;
 
-        BusinessHour businessHour = new(startAt, endAt, duration, professionalId);
+        BusinessHour businessHour = new(startAt, endAt, duration);
 
         var result = businessHour.Schedule(clientId);
         
-        businessHour.Available.Should().Be(result.Success);
-        businessHour.DomainEvents.Should().HaveCount(2);
-        
+        businessHour.Available.Should().BeFalse();
+        businessHour.DomainEvents.Should().ContainSingle();
         businessHour.ClientId.Should().Be(clientId);
         result.Message.Should().BeEmpty();
     }
 
     [Fact]
-    public void Should_Fail_To_ScheduleBusinessHour()
+    public void Should_Fail_ScheduleBusinessHour()
     {
-        var (_, startAt, endAt, duration, professionalId) = BusinessHourBuilder.Build();
-        const int clientId = 1;
+        var (_, startAt, endAt, duration) = BusinessHourBuilder.Build();
+        const long clientId = 1L;
 
-        BusinessHour businessHour = new(startAt, endAt, duration, professionalId);
+        BusinessHour businessHour = new(startAt, endAt, duration);
 
         businessHour.Schedule(clientId);
+        businessHour.Schedule(2);
 
         var result = businessHour.Schedule(clientId);
 
-        businessHour.Available.Should().NotBe(result.Success);
+        businessHour.Available.Should().BeFalse();
         businessHour.ClientId.Should().Be(clientId);
         result.Message.Should().Be("Há um cliente agendado para este horário");
         result.ErrorCode.Should().Be(1);
+    }
+    
+    [Fact]
+    public void Should_Clear_Events()
+    {
+        var (_, startAt, endAt, duration) = BusinessHourBuilder.Build();
+        const long clientId = 1L;
+
+        BusinessHour businessHour = new(startAt, endAt, duration);
+
+        var result = businessHour.Schedule(clientId);
+        businessHour.ClearDomainEvents();
+        
+        businessHour.Available.Should().BeFalse();
+        businessHour.DomainEvents.Should().BeEmpty();
+        
+        businessHour.ClientId.Should().Be(clientId);
+        result.Message.Should().BeEmpty();
     }
 }

@@ -9,14 +9,14 @@ public sealed class Catalog : Entity
     public Catalog(CatalogDescription description)
     {
         Description = description;
-        CreatedAt = DateTimeOffset.Now;
+        CreatedAt = DateTimeOffset.UtcNow;
     }
 
     public void Update(long id, CatalogDescription newDescription)
     {
         Id = id;
         Description = newDescription;
-        UpdatedAt = DateTimeOffset.Now;
+        UpdatedAt = DateTimeOffset.UtcNow;
     }
 
     public string? GetName => Description?.Name;
