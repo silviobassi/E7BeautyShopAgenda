@@ -1,6 +1,7 @@
 using Agenda.Domain.Entities;
 using Agenda.Domain.ValueObjects;
 using FluentAssertions;
+using Test.CommonUtilities.ValueObjects;
 
 namespace Tests.Domain.Entities;
 
@@ -9,15 +10,10 @@ public class SchedulerTest
     [Fact]
     public void Should_CreatingSchedulerInstance()
     {
-        var startAtWeekend = new TimeSpan(8, 0, 0);
-        var endAtWeekend = new TimeSpan(12, 0, 0);
-        var startAtWeekday = new TimeSpan(8, 0, 0);
-        var endAtWeekday = new TimeSpan(18, 0, 0);
+        var (_, _, weekend) = WeekendBuilder.Build();
+        var (_, _, weekday) = WeekdayBuilder.Build();
 
         const long professionalId = 1;
-
-        var weekend = new Weekend(startAtWeekend, endAtWeekend);
-        var weekday = new Weekday(startAtWeekday, endAtWeekday);
 
         var scheduler = new Scheduler(weekend, weekday, professionalId);
 
@@ -32,15 +28,10 @@ public class SchedulerTest
     [Fact]
     public void Should_UpdatingSchedulerInstance()
     {
-        var startAtWeekend = new TimeSpan(8, 0, 0);
-        var endAtWeekend = new TimeSpan(12, 0, 0);
-        var startAtWeekday = new TimeSpan(8, 0, 0);
-        var endAtWeekday = new TimeSpan(18, 0, 0);
+        var (_, _, weekend) = WeekendBuilder.Build();
+        var (_, _, weekday) = WeekdayBuilder.Build();
 
         const long professionalId = 1;
-
-        var weekend = new Weekend(startAtWeekend, endAtWeekend);
-        var weekday = new Weekday(startAtWeekday, endAtWeekday);
 
         var scheduler = new Scheduler(weekend, weekday, professionalId);
 
