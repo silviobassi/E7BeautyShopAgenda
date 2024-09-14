@@ -1,4 +1,6 @@
-﻿namespace Agenda.Domain.Errors;
+﻿using static Agenda.Domain.Errors.ResourceMessageError;
+
+namespace Agenda.Domain.Errors;
 
 public record AlreadyClientSchedule()
-    : AppError(ResourceMessageError.ALREADY_CLIENT_SCHEDULE, ErrorType.BusinessRule, nameof(AlreadyClientSchedule));
+    : AppError(ALREADY_CLIENT_SCHEDULE, ErrorType.BusinessRule, nameof(AlreadyClientSchedule));

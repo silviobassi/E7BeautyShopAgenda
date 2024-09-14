@@ -42,9 +42,7 @@ public class Appointment : Entity
     public Result Cancel(TimeCanceledEvent timeCanceledEvent)
     {
         if (IsNotClientSchedule) return Result.Fail(new NoClientSchedule());
-
-        if (IsLessThanTwoHoursBefore)
-            return Result.Fail(new AppointmentLessThanTwoHours());
+        if (IsLessThanTwoHoursBefore) return Result.Fail(new AppointmentLessThanTwoHours());
 
         UpdateScheduleState();
         RegisterEvent(timeCanceledEvent);

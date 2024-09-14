@@ -90,6 +90,7 @@ public class AppointmentTest
         
         appointment.Available.Should().BeFalse();
         appointment.ClientId.Should().Be(clientId);
+        appointment.DomainEvents.Should().ContainSingle();
         result.Error?.Detail.Should().Be(LESS_THAN_TWO_HOURS);
         result.Error?.ErrorType.Should().Be(ErrorType.BusinessRule);
         result.Error?.ErrorTypeName.Should().Be(nameof(AppointmentLessThanTwoHours));
@@ -108,6 +109,7 @@ public class AppointmentTest
 
         appointment.Available.Should().BeTrue();
         appointment.ClientId.Should().Be(0);
+        appointment.DomainEvents.Should().BeEmpty();
         result.Error?.Detail.Should().Be(NO_CLIENT_SCHEDULE);
         result.Error?.ErrorType.Should().Be(ErrorType.BusinessRule);
         result.Error?.ErrorTypeName.Should().Be(nameof(NoClientSchedule));
@@ -145,6 +147,7 @@ public class AppointmentTest
 
         appointment.Available.Should().BeFalse();
         appointment.ClientId.Should().Be(clientId);
+        appointment.DomainEvents.Should().ContainSingle();
         result.Error?.Detail.Should().Be(ALREADY_CLIENT_SCHEDULE);
         result.Error?.ErrorType.Should().Be(ErrorType.BusinessRule);
         result.Error?.ErrorTypeName.Should().Be(nameof(AlreadyClientSchedule));

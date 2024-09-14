@@ -26,7 +26,7 @@ public class DayOffTest
 
         const DayOfWeek newDayOnWeek = DayOfWeek.Monday;
         dayOff.Update(id, newDayOnWeek);
-        
+
         dayOff.CreatedAt.Should().NotBeNull();
         dayOff.UpdatedAt.Should().NotBeNull();
         dayOff.Id.Should().Be(id);
