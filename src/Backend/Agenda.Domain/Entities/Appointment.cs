@@ -1,5 +1,6 @@
 ﻿using Agenda.Domain.Errors;
 using Agenda.Domain.Events;
+using static Agenda.Domain.Errors.Result;
 
 namespace Agenda.Domain.Entities;
 
@@ -33,20 +34,20 @@ public class Appointment : Entity
 
     public Result Schedule(TimeReservedEvent timeReservedEvent, long clientId)
     {
-        if (IsClientSchedule) return Result.Fail(new AlreadyClientSchedule());
+        if (IsClientSchedule) return Fail(new AlreadyClientSchedule());
         UpdateScheduleState(clientId: clientId, available: false);
         RegisterEvent(timeReservedEvent);
-        return Result.Ok();
+        return Ok();
     }
 
     public Result Cancel(TimeCanceledEvent timeCanceledEvent)
     {
-        if (IsNotClientSchedule) return Result.Fail(new NoClientSchedule());
-        if (IsLessThanTwoHoursBefore) return Result.Fail(new AppointmentLessThanTwoHours());
+        if (IsNotClientSchedule) return Fail(new NoClientSchedule());
+        if (IsLessThanTwoHoursBefore) return Fail(new AppointmentLessThanTwoHours());
 
         UpdateScheduleState();
         RegisterEvent(timeCanceledEvent);
-        return Result.Ok();
+        return Ok();
     }
 
     public void ClearDomainEvents() => _domainEvents.Clear();

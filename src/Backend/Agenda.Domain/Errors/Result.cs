@@ -5,8 +5,7 @@ public class Result
     public bool Success { get; }
 
     public DomainError? Error { get; }
-
-
+    
     private Result(bool success, DomainError? error)
     {
         Success = success;

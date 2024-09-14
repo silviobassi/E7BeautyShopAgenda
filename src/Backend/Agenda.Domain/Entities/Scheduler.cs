@@ -1,4 +1,5 @@
 using Agenda.Domain.Errors;
+using static Agenda.Domain.Errors.Result;
 
 namespace Agenda.Domain.Entities;
 
@@ -26,9 +27,9 @@ public class Scheduler : Entity
     public Result AddAppointment(Appointment appointment)
     {
         if (DaysOff.ToList().Exists(dayOff => dayOff.DayOnWeek == appointment.AppointmentHours.DayOfWeek))
-            return Result.Fail(new AppointmentCannotDayOff());
+            return Fail(new AppointmentCannotDayOff());
 
         Appointments = Appointments.Append(appointment);
-        return Result.Ok();
+        return Ok();
     }
 }
