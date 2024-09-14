@@ -22,6 +22,8 @@ public class SchedulerTest
 
         var scheduler = new Scheduler(daysOff, weekend, weekday, professionalId);
 
+        scheduler.CreatedAt.Should().NotBeNull();
+        scheduler.UpdatedAt.Should().BeNull();
         scheduler.DaysOff.Should().BeEquivalentTo(daysOff);
         scheduler.Weekend.Should().BeEquivalentTo(weekend);
         scheduler.Weekday.Should().BeEquivalentTo(weekday);
@@ -57,6 +59,8 @@ public class SchedulerTest
         scheduler.Update(1L, newDaysOff, newWeekend, newWeekday, newProfessionalId);
         
         scheduler.Id.Should().Be(1L);
+        scheduler.CreatedAt.Should().NotBeNull();
+        scheduler.UpdatedAt.Should().NotBeNull();
         scheduler.DaysOff.Should().BeEquivalentTo(newDaysOff);
         scheduler.Weekend.Should().BeEquivalentTo(newWeekend);
         scheduler.Weekday.Should().BeEquivalentTo(newWeekday);
