@@ -2,4 +2,4 @@
 
 namespace Agenda.Domain.Errors;
 
-public record NoClientSchedule() : DomainError(NO_CLIENT_SCHEDULE, ErrorType.BusinessRule, nameof(NoClientSchedule));
+public sealed record NoClientSchedule() : DomainError(NO_CLIENT_SCHEDULE, ErrorType.BusinessRule, nameof(NoClientSchedule));

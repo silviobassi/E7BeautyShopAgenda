@@ -4,15 +4,15 @@ public class Result
 {
     public bool Success { get; }
 
-    public AppError? Error { get; }
+    public DomainError? Error { get; }
 
 
-    private Result(bool success, AppError? error)
+    private Result(bool success, DomainError? error)
     {
         Success = success;
         Error = error;
     }
 
     public static Result Ok() => new(true, null);
-    public static Result Fail(AppError error) => new(false, error);
+    public static Result Fail(DomainError error) => new(false, error);
 }

@@ -2,5 +2,5 @@
 
 namespace Agenda.Domain.Errors;
 
-public record AlreadyClientSchedule()
+public sealed record AlreadyClientSchedule()
     : DomainError(ALREADY_CLIENT_SCHEDULE, ErrorType.BusinessRule, nameof(AlreadyClientSchedule));
