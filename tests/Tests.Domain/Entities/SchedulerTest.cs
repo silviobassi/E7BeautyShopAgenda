@@ -9,7 +9,6 @@ public class SchedulerTest
     [Fact]
     public void Should_CreatingSchedulerInstance()
     {
-        List<DayOff> daysOff = [new(DayOfWeek.Monday), new(DayOfWeek.Tuesday)];
         var startAtWeekend = new TimeSpan(8, 0, 0);
         var endAtWeekend = new TimeSpan(12, 0, 0);
         var startAtWeekday = new TimeSpan(8, 0, 0);
@@ -20,11 +19,11 @@ public class SchedulerTest
         var weekend = new Weekend(startAtWeekend, endAtWeekend);
         var weekday = new Weekday(startAtWeekday, endAtWeekday);
 
-        var scheduler = new Scheduler(daysOff, weekend, weekday, professionalId);
+        var scheduler = new Scheduler(weekend, weekday, professionalId);
 
         scheduler.CreatedAt.Should().NotBeNull();
         scheduler.UpdatedAt.Should().BeNull();
-        scheduler.DaysOff.Should().BeEquivalentTo(daysOff);
+        scheduler.DaysOff.Should().BeEmpty();
         scheduler.Weekend.Should().BeEquivalentTo(weekend);
         scheduler.Weekday.Should().BeEquivalentTo(weekday);
         scheduler.ProfessionalId.Should().Be(professionalId);
@@ -33,7 +32,6 @@ public class SchedulerTest
     [Fact]
     public void Should_UpdatingSchedulerInstance()
     {
-        List<DayOff> daysOff = [new(DayOfWeek.Monday), new(DayOfWeek.Tuesday)];
         var startAtWeekend = new TimeSpan(8, 0, 0);
         var endAtWeekend = new TimeSpan(12, 0, 0);
         var startAtWeekday = new TimeSpan(8, 0, 0);
@@ -44,9 +42,8 @@ public class SchedulerTest
         var weekend = new Weekend(startAtWeekend, endAtWeekend);
         var weekday = new Weekday(startAtWeekday, endAtWeekday);
 
-        var scheduler = new Scheduler(daysOff, weekend, weekday, professionalId);
+        var scheduler = new Scheduler(weekend, weekday, professionalId);
 
-        List<DayOff> newDaysOff = [new(DayOfWeek.Sunday)];
         var newStartAtWeekend = new TimeSpan(8, 0, 0);
         var newEndAtWeekend = new TimeSpan(14, 0, 0);
         var newStartAtWeekday = new TimeSpan(8, 0, 0);
@@ -56,12 +53,12 @@ public class SchedulerTest
 
         var newWeekend = new Weekend(newStartAtWeekend, newEndAtWeekend);
         var newWeekday = new Weekday(newStartAtWeekday, newEndAtWeekday);
-        scheduler.Update(1L, newDaysOff, newWeekend, newWeekday, newProfessionalId);
-        
+        scheduler.Update(1L, newWeekend, newWeekday, newProfessionalId);
+
         scheduler.Id.Should().Be(1L);
         scheduler.CreatedAt.Should().NotBeNull();
         scheduler.UpdatedAt.Should().NotBeNull();
-        scheduler.DaysOff.Should().BeEquivalentTo(newDaysOff);
+        scheduler.DaysOff.Should().BeEmpty();
         scheduler.Weekend.Should().BeEquivalentTo(newWeekend);
         scheduler.Weekday.Should().BeEquivalentTo(newWeekday);
         scheduler.ProfessionalId.Should().Be(newProfessionalId);
