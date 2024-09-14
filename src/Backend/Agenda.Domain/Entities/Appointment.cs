@@ -34,7 +34,7 @@ public class Appointment : Entity
 
     public Result Schedule(TimeReservedEvent timeReservedEvent, long clientId)
     {
-        if (IsClientSchedule) return Fail(new AlreadyClientSchedule());
+        if (IsClientSchedule) return new AlreadyClientSchedule();
         UpdateScheduleState(clientId: clientId, available: false);
         RegisterEvent(timeReservedEvent);
         return Ok();
@@ -42,8 +42,8 @@ public class Appointment : Entity
 
     public Result Cancel(TimeCanceledEvent timeCanceledEvent)
     {
-        if (IsNotClientSchedule) return Fail(new NoClientSchedule());
-        if (IsLessThanTwoHoursBefore) return Fail(new AppointmentLessThanTwoHours());
+        if (IsNotClientSchedule) return new NoClientSchedule();
+        if (IsLessThanTwoHoursBefore) return new AppointmentLessThanTwoHours();
 
         UpdateScheduleState();
         RegisterEvent(timeCanceledEvent);

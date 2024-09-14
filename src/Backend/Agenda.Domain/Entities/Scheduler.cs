@@ -26,8 +26,9 @@ public class Scheduler : Entity
 
     public Result AddAppointment(Appointment appointment)
     {
-        if (DaysOff.ToList().Exists(dayOff => dayOff.DayOnWeek == appointment.AppointmentHours.DayOfWeek))
-            return Fail(new AppointmentCannotDayOff());
+        var appointmentHoursDayOfWeek = appointment.AppointmentHours.DayOfWeek;
+        if (DaysOff.ToList().Exists(dayOff => dayOff.DayOnWeek == appointmentHoursDayOfWeek))
+            return new AppointmentCannotDayOff();
 
         Appointments = Appointments.Append(appointment);
         return Ok();

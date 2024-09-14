@@ -13,5 +13,6 @@ public class Result
     }
 
     public static Result Ok() => new(true, null);
-    public static Result Fail(DomainError error) => new(false, error);
+    public static implicit operator Result(DomainError error) => Fail(error);
+    private static Result Fail(DomainError error) => new(false, error);
 }
