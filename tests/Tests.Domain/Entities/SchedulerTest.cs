@@ -12,60 +12,40 @@ public class SchedulerTest
     [Fact]
     public void Should_CreatingSchedulerInstance()
     {
-        var (_, _, weekend) = WeekendBuilder.Build();
-        var (_, _, weekday) = WeekdayBuilder.Build();
-
         const long professionalId = 1;
 
-        var scheduler = new Scheduler(weekend, weekday, professionalId);
+        var scheduler = new Scheduler(professionalId);
 
         scheduler.CreatedAt.Should().NotBeNull();
         scheduler.UpdatedAt.Should().BeNull();
         scheduler.DaysOff.Should().BeEmpty();
-        scheduler.Weekend.Should().BeEquivalentTo(weekend);
-        scheduler.Weekday.Should().BeEquivalentTo(weekday);
         scheduler.ProfessionalId.Should().Be(professionalId);
     }
 
     [Fact]
     public void Should_UpdatingSchedulerInstance()
     {
-        var (_, _, weekend) = WeekendBuilder.Build();
-        var (_, _, weekday) = WeekdayBuilder.Build();
-
         const long professionalId = 1;
 
-        var scheduler = new Scheduler(weekend, weekday, professionalId);
-
-        var newStartAtWeekend = new TimeSpan(8, 0, 0);
-        var newEndAtWeekend = new TimeSpan(14, 0, 0);
-        var newStartAtWeekday = new TimeSpan(8, 0, 0);
-        var newEndAtWeekday = new TimeSpan(17, 0, 0);
-
+        var scheduler = new Scheduler(professionalId);
+        
         const long newProfessionalId = 2;
 
-        var newWeekend = new Weekend(newStartAtWeekend, newEndAtWeekend);
-        var newWeekday = new Weekday(newStartAtWeekday, newEndAtWeekday);
-        scheduler.Update(1L, newWeekend, newWeekday, newProfessionalId);
+        scheduler.Update(2L, newProfessionalId);
 
-        scheduler.Id.Should().Be(1L);
+        scheduler.Id.Should().Be(2L);
         scheduler.CreatedAt.Should().NotBeNull();
         scheduler.UpdatedAt.Should().NotBeNull();
         scheduler.DaysOff.Should().BeEmpty();
-        scheduler.Weekend.Should().BeEquivalentTo(newWeekend);
-        scheduler.Weekday.Should().BeEquivalentTo(newWeekday);
         scheduler.ProfessionalId.Should().Be(newProfessionalId);
     }
 
     [Fact]
     public void Should_AddDayOffInScheduler()
     {
-        var (_, _, weekend) = WeekendBuilder.Build();
-        var (_, _, weekday) = WeekdayBuilder.Build();
-
         const long professionalId = 1;
 
-        var scheduler = new Scheduler(weekend, weekday, professionalId);
+        var scheduler = new Scheduler(professionalId);
 
         scheduler.AddDayOff(new DayOff(DayOfWeek.Saturday));
         scheduler.AddDayOff(new DayOff(DayOfWeek.Sunday));
@@ -73,20 +53,15 @@ public class SchedulerTest
         scheduler.CreatedAt.Should().NotBeNull();
         scheduler.UpdatedAt.Should().BeNull();
         scheduler.DaysOff.Should().HaveCount(2);
-        scheduler.Weekend.Should().BeEquivalentTo(weekend);
-        scheduler.Weekday.Should().BeEquivalentTo(weekday);
         scheduler.ProfessionalId.Should().Be(professionalId);
     }
 
     [Fact]
     public void Should_AddAppointmentInScheduler()
     {
-        var (_, _, weekend) = WeekendBuilder.Build();
-        var (_, _, weekday) = WeekdayBuilder.Build();
-
         const long professionalId = 1;
 
-        var scheduler = new Scheduler(weekend, weekday, professionalId);
+        var scheduler = new Scheduler(professionalId);
 
         var (_, appointmentHour, duration) = AppointmentBuilder.Build();
 
@@ -96,20 +71,16 @@ public class SchedulerTest
         scheduler.CreatedAt.Should().NotBeNull();
         scheduler.UpdatedAt.Should().BeNull();
         scheduler.Appointments.Should().HaveCount(2);
-        scheduler.Weekend.Should().BeEquivalentTo(weekend);
-        scheduler.Weekday.Should().BeEquivalentTo(weekday);
         scheduler.ProfessionalId.Should().Be(professionalId);
     }
 
     [Fact]
     public void Should_Error_AddAppointmentInScheduler_OnDayOff()
     {
-        var (_, _, weekend) = WeekendBuilder.Build();
-        var (_, _, weekday) = WeekdayBuilder.Build();
 
         const long professionalId = 1;
 
-        var scheduler = new Scheduler(weekend, weekday, professionalId);
+        var scheduler = new Scheduler(professionalId);
 
         var (_, _, duration) = AppointmentBuilder.Build();
         
@@ -124,8 +95,6 @@ public class SchedulerTest
         scheduler.CreatedAt.Should().NotBeNull();
         scheduler.UpdatedAt.Should().BeNull();
         scheduler.Appointments.Should().BeEmpty();
-        scheduler.Weekend.Should().BeEquivalentTo(weekend);
-        scheduler.Weekday.Should().BeEquivalentTo(weekday);
         scheduler.ProfessionalId.Should().Be(professionalId);
     }
 }
