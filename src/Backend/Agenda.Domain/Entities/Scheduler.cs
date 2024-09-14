@@ -8,4 +8,13 @@ public class Scheduler(IEnumerable<DayOff> daysOff, Weekend weekend, Weekday wee
     public Weekend Weekend { get; private set; } = weekend;
     public Weekday Weekday { get; private set; } = weekday;
     public long ProfessionalId { get; private set; } = professionalId;
+
+    public void Update(long id, List<DayOff> newDaysOff, Weekend newWeekend, Weekday newWeekday, long newProfessionalId)
+    {
+        Id = id;
+        DaysOff = newDaysOff;
+        Weekend = newWeekend;
+        Weekday = newWeekday;
+        ProfessionalId = newProfessionalId;
+    }
 }
