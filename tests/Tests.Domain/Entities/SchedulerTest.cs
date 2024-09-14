@@ -1,6 +1,7 @@
 using Agenda.Domain.Entities;
 using Agenda.Domain.ValueObjects;
 using FluentAssertions;
+using Test.CommonUtilities.Entities;
 using Test.CommonUtilities.ValueObjects;
 
 namespace Tests.Domain.Entities;
@@ -56,7 +57,7 @@ public class SchedulerTest
     }
     
     [Fact]
-    public void Should_AddAppointmentInScheduler()
+    public void Should_AddDayOffInScheduler()
     {
         var (_, _, weekend) = WeekendBuilder.Build();
         var (_, _, weekday) = WeekdayBuilder.Build();
@@ -71,6 +72,29 @@ public class SchedulerTest
         scheduler.CreatedAt.Should().NotBeNull();
         scheduler.UpdatedAt.Should().BeNull();
         scheduler.DaysOff.Should().HaveCount(2);
+        scheduler.Weekend.Should().BeEquivalentTo(weekend);
+        scheduler.Weekday.Should().BeEquivalentTo(weekday);
+        scheduler.ProfessionalId.Should().Be(professionalId);
+    }
+    
+    [Fact]
+    public void Should_AddAppointmentInScheduler()
+    {
+        var (_, _, weekend) = WeekendBuilder.Build();
+        var (_, _, weekday) = WeekdayBuilder.Build();
+
+        const long professionalId = 1;
+
+        var scheduler = new Scheduler(weekend, weekday, professionalId);
+
+        var (_, appointmentHour, duration) = AppointmentBuilder.Build();
+        
+        scheduler.AddAppointment(new Appointment(appointmentHour, duration));
+        scheduler.AddAppointment(new Appointment(appointmentHour, duration));
+
+        scheduler.CreatedAt.Should().NotBeNull();
+        scheduler.UpdatedAt.Should().BeNull();
+        scheduler.Appointments.Should().HaveCount(2);
         scheduler.Weekend.Should().BeEquivalentTo(weekend);
         scheduler.Weekday.Should().BeEquivalentTo(weekday);
         scheduler.ProfessionalId.Should().Be(professionalId);

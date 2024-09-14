@@ -5,6 +5,8 @@ namespace Agenda.Domain.Entities;
 public class Scheduler : Entity
 {
     public IEnumerable<DayOff> DaysOff { get; private set; } = [];
+
+    public IEnumerable<Appointment> Appointments { get; private set; } = [];
     public Weekend Weekend { get; private set; }
     public Weekday Weekday { get; private set; }
     public long ProfessionalId { get; private set; }
@@ -26,8 +28,10 @@ public class Scheduler : Entity
         UpdatedAt = DateTimeOffset.UtcNow;
     }
 
-    public void AddDayOff(DayOff dayOff)
+    public void AddDayOff(DayOff dayOff) => DaysOff = DaysOff.Append(dayOff);
+    
+    public void AddAppointment(Appointment appointment)
     {
-        DaysOff = DaysOff.Append(dayOff);
+        Appointments = Appointments.Append(appointment);
     }
 }
