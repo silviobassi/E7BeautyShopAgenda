@@ -3,16 +3,16 @@
 public class Result
 {
     public bool Success { get; }
-    public string ErrorMessage { get; }
-    public int ErrorCode { get; }
 
-    private Result(bool success, string errorMessage, int errorCode)
+    public AppError? Error { get; }
+
+
+    private Result(bool success, AppError? error)
     {
         Success = success;
-        ErrorMessage = errorMessage;
-        ErrorCode = errorCode;
+        Error = error;
     }
 
-    public static Result Ok() => new(true, string.Empty, 0);
-    public static Result Fail(string message, int errorCode) => new(false, message, errorCode);
+    public static Result Ok() => new(true, null);
+    public static Result Fail(AppError error) => new(false, error);
 }

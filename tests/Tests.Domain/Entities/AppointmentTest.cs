@@ -1,8 +1,8 @@
 ﻿using Agenda.Domain.Entities;
+using Agenda.Domain.Errors;
 using Agenda.Domain.Events;
 using FluentAssertions;
 using Test.CommonUtilities.Entities;
-using static Agenda.Domain.Errors.ErrorMessages;
 using static Agenda.Domain.Errors.ResourceMessageError;
 
 namespace Tests.Domain.Entities;
@@ -90,8 +90,9 @@ public class AppointmentTest
         
         appointment.Available.Should().BeFalse();
         appointment.ClientId.Should().Be(clientId);
-        result.ErrorMessage.Should().Be(LESS_THAN_TWO_HOURS_BEFORE);
-        result.ErrorCode.Should().Be(LessThanTwoHoursBeforeCode);
+        result.Error?.Detail.Should().Be(LESS_THAN_TWO_HOURS);
+        result.Error?.ErrorType.Should().Be(ErrorType.BusinessRule);
+        result.Error?.ErrorTypeName.Should().Be(nameof(AppointmentLessThanTwoHours));
     }
 
     [Fact]
@@ -107,8 +108,9 @@ public class AppointmentTest
 
         appointment.Available.Should().BeTrue();
         appointment.ClientId.Should().Be(0);
-        result.ErrorMessage.Should().Be(NO_CLIENT_SCHEDULE);
-        result.ErrorCode.Should().Be(NoClientScheduledCode);
+        result.Error?.Detail.Should().Be(NO_CLIENT_SCHEDULE);
+        result.Error?.ErrorType.Should().Be(ErrorType.BusinessRule);
+        result.Error?.ErrorTypeName.Should().Be(nameof(NoClientSchedule));
     }
 
     [Fact]
@@ -125,7 +127,8 @@ public class AppointmentTest
         appointment.Available.Should().BeFalse();
         appointment.DomainEvents.Should().ContainSingle();
         appointment.ClientId.Should().Be(clientId);
-        result.ErrorMessage.Should().BeEmpty();
+        result.Error.Should().BeNull();
+       
     }
 
     [Fact]
@@ -142,8 +145,9 @@ public class AppointmentTest
 
         appointment.Available.Should().BeFalse();
         appointment.ClientId.Should().Be(clientId);
-        result.ErrorMessage.Should().Be(ALREADY_CLIENT_SCHEDULE);
-        result.ErrorCode.Should().Be(ClientScheduledCode);
+        result.Error?.Detail.Should().Be(ALREADY_CLIENT_SCHEDULE);
+        result.Error?.ErrorType.Should().Be(ErrorType.BusinessRule);
+        result.Error?.ErrorTypeName.Should().Be(nameof(AlreadyClientSchedule));
     }
 
     [Fact]
@@ -155,7 +159,7 @@ public class AppointmentTest
         Appointment appointment = new(startAt, duration);
 
         TimeReservedEvent timeReservedEvent = new(appointment.AppointmentHours, appointment.Duration, appointment.ClientId);
-        var result = appointment.Schedule(timeReservedEvent, clientId);
+        appointment.Schedule(timeReservedEvent, clientId);
         
         appointment.ClearDomainEvents();
 
@@ -163,6 +167,5 @@ public class AppointmentTest
         appointment.DomainEvents.Should().BeEmpty();
 
         appointment.ClientId.Should().Be(clientId);
-        result.ErrorMessage.Should().BeEmpty();
     }
 }

@@ -1,6 +1,4 @@
 using Agenda.Domain.Errors;
-using static Agenda.Domain.Errors.ErrorMessages;
-using static Agenda.Domain.Errors.ResourceMessageError;
 
 namespace Agenda.Domain.Entities;
 
@@ -10,7 +8,7 @@ public class Scheduler : Entity
     public IEnumerable<Appointment> Appointments { get; private set; } = [];
     public long ProfessionalId { get; private set; }
 
-    public Scheduler( long professionalId)
+    public Scheduler(long professionalId)
     {
         ProfessionalId = professionalId;
         CreatedAt = DateTimeOffset.UtcNow;
@@ -28,8 +26,8 @@ public class Scheduler : Entity
     public Result AddAppointment(Appointment appointment)
     {
         if (DaysOff.ToList().Exists(dayOff => dayOff.DayOnWeek == appointment.AppointmentHours.DayOfWeek))
-            return Result.Fail(APPOINTMENT_HOUR_CANNOT_DAY_OFF, AppointmentHourCannotBeOnDayOffCode);
-        
+            return Result.Fail(new AppointmentCannotDayOff());
+
         Appointments = Appointments.Append(appointment);
         return Result.Ok();
     }

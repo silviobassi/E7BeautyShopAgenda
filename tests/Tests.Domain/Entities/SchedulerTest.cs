@@ -2,7 +2,6 @@ using Agenda.Domain.Entities;
 using Agenda.Domain.Errors;
 using FluentAssertions;
 using Test.CommonUtilities.Entities;
-
 using static Agenda.Domain.Errors.ResourceMessageError;
 namespace Tests.Domain.Entities;
 
@@ -89,8 +88,9 @@ public class SchedulerTest
 
         var result = scheduler.AddAppointment(new Appointment(newAppointmentHour, duration));
 
-        result.ErrorMessage.Should().Be(APPOINTMENT_HOUR_CANNOT_DAY_OFF);
-        result.ErrorCode.Should().Be(ErrorMessages.AppointmentHourCannotBeOnDayOffCode);
+        result.Error?.Detail.Should().Be(APPOINTMENT_CANNOT_DAY_OFF);
+        result.Error?.ErrorType.Should().Be(ErrorType.BusinessRule);
+        result.Error?.ErrorTypeName.Should().Be(nameof(AppointmentCannotDayOff));
         scheduler.CreatedAt.Should().NotBeNull();
         scheduler.UpdatedAt.Should().BeNull();
         scheduler.Appointments.Should().BeEmpty();

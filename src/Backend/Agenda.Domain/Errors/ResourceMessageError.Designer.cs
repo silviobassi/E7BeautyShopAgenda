@@ -70,20 +70,20 @@ namespace Agenda.Domain.Errors {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to The appointment cannot be canceled less than 2 hours in advance..
         /// </summary>
-        public static string APPOINTMENT_HOUR_CANNOT_DAY_OFF {
+        public static string APPOINTMENT_CANNOT_DAY_OFF {
             get {
-                return ResourceManager.GetString("APPOINTMENT_HOUR_CANNOT_DAY_OFF", resourceCulture);
+                return ResourceManager.GetString("APPOINTMENT_CANNOT_DAY_OFF", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The appointment cannot be canceled less than 2 hours in advance..
         /// </summary>
-        public static string LESS_THAN_TWO_HOURS_BEFORE {
+        public static string LESS_THAN_TWO_HOURS {
             get {
-                return ResourceManager.GetString("LESS_THAN_TWO_HOURS_BEFORE", resourceCulture);
+                return ResourceManager.GetString("LESS_THAN_TWO_HOURS", resourceCulture);
             }
         }
         

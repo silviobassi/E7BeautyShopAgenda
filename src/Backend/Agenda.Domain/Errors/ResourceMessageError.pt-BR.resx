@@ -123,7 +123,10 @@
   <data name="NO_CLIENT_SCHEDULE" xml:space="preserve">
     <value>Não há um cliente agendado neste horário.</value>
   </data>
-  <data name="LESS_THAN_TWO_HOURS_BEFORE" xml:space="preserve">
+  <data name="LESS_THAN_TWO_HOURS" xml:space="preserve">
+    <value>O horário não pode ser cancelado com menos de 2 horas de antecedência.</value>
+  </data>
+  <data name="APPOINTMENT_CANNOT_DAY_OFF" xml:space="preserve">
     <value>O horário não pode ser cancelado com menos de 2 horas de antecedência.</value>
   </data>
 </root>
