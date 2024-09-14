@@ -3,13 +3,13 @@
 public class Result
 {
     public bool Success { get; }
-    public string Message { get; }
+    public string ErrorMessage { get; }
     public int ErrorCode { get; }
 
-    private Result(bool success, string message, int errorCode)
+    private Result(bool success, string errorMessage, int errorCode)
     {
         Success = success;
-        Message = message;
+        ErrorMessage = errorMessage;
         ErrorCode = errorCode;
     }
 

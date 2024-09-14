@@ -89,7 +89,7 @@ public class AppointmentTest
         
         appointment.Available.Should().BeFalse();
         appointment.ClientId.Should().Be(clientId);
-        result.Message.Should().Be(LessThanTwoHoursBeforeMessage);
+        result.ErrorMessage.Should().Be(LessThanTwoHoursBeforeMessage);
         result.ErrorCode.Should().Be(LessThanTwoHoursBeforeCode);
     }
 
@@ -106,7 +106,7 @@ public class AppointmentTest
 
         appointment.Available.Should().BeTrue();
         appointment.ClientId.Should().Be(0);
-        result.Message.Should().Be(NoClientScheduledMessage);
+        result.ErrorMessage.Should().Be(NoClientScheduledMessage);
         result.ErrorCode.Should().Be(NoClientScheduledCode);
     }
 
@@ -124,7 +124,7 @@ public class AppointmentTest
         appointment.Available.Should().BeFalse();
         appointment.DomainEvents.Should().ContainSingle();
         appointment.ClientId.Should().Be(clientId);
-        result.Message.Should().BeEmpty();
+        result.ErrorMessage.Should().BeEmpty();
     }
 
     [Fact]
@@ -141,7 +141,7 @@ public class AppointmentTest
 
         appointment.Available.Should().BeFalse();
         appointment.ClientId.Should().Be(clientId);
-        result.Message.Should().Be(ClientScheduledMessage);
+        result.ErrorMessage.Should().Be(ClientScheduledMessage);
         result.ErrorCode.Should().Be(ClientScheduledCode);
     }
 
@@ -162,6 +162,6 @@ public class AppointmentTest
         appointment.DomainEvents.Should().BeEmpty();
 
         appointment.ClientId.Should().Be(clientId);
-        result.Message.Should().BeEmpty();
+        result.ErrorMessage.Should().BeEmpty();
     }
 }

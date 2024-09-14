@@ -1,4 +1,5 @@
 using Agenda.Domain.Entities;
+using Agenda.Domain.Errors;
 using Agenda.Domain.ValueObjects;
 using FluentAssertions;
 using Test.CommonUtilities.Entities;
@@ -55,7 +56,7 @@ public class SchedulerTest
         scheduler.Weekday.Should().BeEquivalentTo(newWeekday);
         scheduler.ProfessionalId.Should().Be(newProfessionalId);
     }
-    
+
     [Fact]
     public void Should_AddDayOffInScheduler()
     {
@@ -65,7 +66,7 @@ public class SchedulerTest
         const long professionalId = 1;
 
         var scheduler = new Scheduler(weekend, weekday, professionalId);
-        
+
         scheduler.AddDayOff(new DayOff(DayOfWeek.Saturday));
         scheduler.AddDayOff(new DayOff(DayOfWeek.Sunday));
 
@@ -76,7 +77,7 @@ public class SchedulerTest
         scheduler.Weekday.Should().BeEquivalentTo(weekday);
         scheduler.ProfessionalId.Should().Be(professionalId);
     }
-    
+
     [Fact]
     public void Should_AddAppointmentInScheduler()
     {
@@ -88,13 +89,41 @@ public class SchedulerTest
         var scheduler = new Scheduler(weekend, weekday, professionalId);
 
         var (_, appointmentHour, duration) = AppointmentBuilder.Build();
-        
+
         scheduler.AddAppointment(new Appointment(appointmentHour, duration));
         scheduler.AddAppointment(new Appointment(appointmentHour, duration));
 
         scheduler.CreatedAt.Should().NotBeNull();
         scheduler.UpdatedAt.Should().BeNull();
         scheduler.Appointments.Should().HaveCount(2);
+        scheduler.Weekend.Should().BeEquivalentTo(weekend);
+        scheduler.Weekday.Should().BeEquivalentTo(weekday);
+        scheduler.ProfessionalId.Should().Be(professionalId);
+    }
+
+    [Fact]
+    public void Should_Error_AddAppointmentInScheduler_OnDayOff()
+    {
+        var (_, _, weekend) = WeekendBuilder.Build();
+        var (_, _, weekday) = WeekdayBuilder.Build();
+
+        const long professionalId = 1;
+
+        var scheduler = new Scheduler(weekend, weekday, professionalId);
+
+        var (_, _, duration) = AppointmentBuilder.Build();
+        
+        var newAppointmentHour = new DateTimeOffset(2024, 9, 14, 8, 0, 0, TimeSpan.Zero);
+
+        scheduler.AddDayOff(new DayOff(DayOfWeek.Saturday));
+
+        var result = scheduler.AddAppointment(new Appointment(newAppointmentHour, duration));
+
+        result.ErrorMessage.Should().Be(ErrorMessages.AppointmentHourCannotBeOnDayOffMessage);
+        result.ErrorCode.Should().Be(ErrorMessages.AppointmentHourCannotBeOnDayOffCode);
+        scheduler.CreatedAt.Should().NotBeNull();
+        scheduler.UpdatedAt.Should().BeNull();
+        scheduler.Appointments.Should().BeEmpty();
         scheduler.Weekend.Should().BeEquivalentTo(weekend);
         scheduler.Weekday.Should().BeEquivalentTo(weekday);
         scheduler.ProfessionalId.Should().Be(professionalId);
