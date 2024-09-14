@@ -1,6 +1,9 @@
 ﻿using Agenda.Domain.Errors;
 using Agenda.Domain.Events;
+using Agenda.Errors;
 using static Agenda.Domain.Errors.ErrorMessages;
+using static Agenda.Domain.Errors.ResourceMessageError;
+
 
 namespace Agenda.Domain.Entities;
 
@@ -34,7 +37,7 @@ public class Appointment : Entity
 
     public Result Schedule(TimeReservedEvent timeReservedEvent, long clientId)
     {
-        if (IsClientSchedule) return Result.Fail(ClientScheduledMessage, ClientScheduledCode);
+        if (IsClientSchedule) return Result.Fail(ALREADY_CLIENT_SCHEDULE, ClientScheduledCode);
         UpdateScheduleState(clientId: clientId, available: false);
         RegisterEvent(timeReservedEvent);
         return Result.Ok();
@@ -42,10 +45,10 @@ public class Appointment : Entity
 
     public Result Cancel(TimeCanceledEvent timeCanceledEvent)
     {
-        if (IsNotClientSchedule) return Result.Fail(NoClientScheduledMessage, NoClientScheduledCode);
+        if (IsNotClientSchedule) return Result.Fail(NO_CLIENT_SCHEDULE, NoClientScheduledCode);
 
         if (IsLessThanTwoHoursBefore)
-            return Result.Fail(LessThanTwoHoursBeforeMessage, LessThanTwoHoursBeforeCode);
+            return Result.Fail(LESS_THAN_TWO_HOURS_BEFORE, LessThanTwoHoursBeforeCode);
 
         UpdateScheduleState();
         RegisterEvent(timeCanceledEvent);

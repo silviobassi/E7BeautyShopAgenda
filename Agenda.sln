@@ -11,27 +11,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{D26F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{08BFF2F1-D50A-4744-A429-E587DF565D0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agenda.Api", "src\Backend\Agenda.Api\Agenda.Api.csproj", "{C3F7FFF8-A341-4D87-A518-262B26F8E042}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agenda.Api", "src\Backend\Agenda.Api\Agenda.Api.csproj", "{C3F7FFF8-A341-4D87-A518-262B26F8E042}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agenda.Application", "src\Backend\Agenda.Application\Agenda.Application.csproj", "{F3FB7C3D-EF94-4A46-A56E-8AB7609DB936}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agenda.Application", "src\Backend\Agenda.Application\Agenda.Application.csproj", "{F3FB7C3D-EF94-4A46-A56E-8AB7609DB936}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agenda.Infrastructure", "src\Backend\Agenda.Infrastructure\Agenda.Infrastructure.csproj", "{3D6DCB33-E6C7-4439-B722-91251FABC526}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agenda.Infrastructure", "src\Backend\Agenda.Infrastructure\Agenda.Infrastructure.csproj", "{3D6DCB33-E6C7-4439-B722-91251FABC526}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agenda.Domain", "src\Backend\Agenda.Domain\Agenda.Domain.csproj", "{3539203D-DAB3-4F80-8E80-86F9E1F30D7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agenda.Domain", "src\Backend\Agenda.Domain\Agenda.Domain.csproj", "{3539203D-DAB3-4F80-8E80-86F9E1F30D7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agenda.Communication", "src\Shared\Agenda.Communication\Agenda.Communication.csproj", "{1789EDBD-B7F9-4537-BCCE-EC193AB7B359}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agenda.Communication", "src\Shared\Agenda.Communication\Agenda.Communication.csproj", "{1789EDBD-B7F9-4537-BCCE-EC193AB7B359}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agenda.Error", "src\Shared\Agenda.Error\Agenda.Error.csproj", "{6827F288-8E55-4C78-8BB4-13FCCCD66952}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agenda.Errors", "src\Shared\Agenda.Error\Agenda.Errors.csproj", "{6827F288-8E55-4C78-8BB4-13FCCCD66952}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.CommonUtilities", "tests\Tests.CommonUtilities\Tests.CommonUtilities.csproj", "{52C0F098-33F6-416F-973A-EB5567058C6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.CommonUtilities", "tests\Tests.CommonUtilities\Tests.CommonUtilities.csproj", "{52C0F098-33F6-416F-973A-EB5567058C6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Usecase", "tests\Tests.Usecase\Tests.Usecase.csproj", "{FEA56107-2E28-4355-8437-90C37E3CF104}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Usecase", "tests\Tests.Usecase\Tests.Usecase.csproj", "{FEA56107-2E28-4355-8437-90C37E3CF104}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Api", "tests\Tests.Api\Tests.Api.csproj", "{20923295-43E6-4731-8E1E-81E94DBD4C65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Api", "tests\Tests.Api\Tests.Api.csproj", "{20923295-43E6-4731-8E1E-81E94DBD4C65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Validator", "tests\Tests.Validator\Tests.Validator.csproj", "{4FAC2BAC-DBEA-4DA2-A253-E9C18E482F18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Validator", "tests\Tests.Validator\Tests.Validator.csproj", "{4FAC2BAC-DBEA-4DA2-A253-E9C18E482F18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Domain", "tests\Tests.Domain\Tests.Domain.csproj", "{FA9CFA32-6E8A-49A2-8305-B2FE89D66F6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Domain", "tests\Tests.Domain\Tests.Domain.csproj", "{FA9CFA32-6E8A-49A2-8305-B2FE89D66F6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

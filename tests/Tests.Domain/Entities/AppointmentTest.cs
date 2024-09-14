@@ -3,6 +3,7 @@ using Agenda.Domain.Events;
 using FluentAssertions;
 using Test.CommonUtilities.Entities;
 using static Agenda.Domain.Errors.ErrorMessages;
+using static Agenda.Domain.Errors.ResourceMessageError;
 
 namespace Tests.Domain.Entities;
 
@@ -89,7 +90,7 @@ public class AppointmentTest
         
         appointment.Available.Should().BeFalse();
         appointment.ClientId.Should().Be(clientId);
-        result.ErrorMessage.Should().Be(LessThanTwoHoursBeforeMessage);
+        result.ErrorMessage.Should().Be(LESS_THAN_TWO_HOURS_BEFORE);
         result.ErrorCode.Should().Be(LessThanTwoHoursBeforeCode);
     }
 
@@ -106,7 +107,7 @@ public class AppointmentTest
 
         appointment.Available.Should().BeTrue();
         appointment.ClientId.Should().Be(0);
-        result.ErrorMessage.Should().Be(NoClientScheduledMessage);
+        result.ErrorMessage.Should().Be(NO_CLIENT_SCHEDULE);
         result.ErrorCode.Should().Be(NoClientScheduledCode);
     }
 
@@ -141,7 +142,7 @@ public class AppointmentTest
 
         appointment.Available.Should().BeFalse();
         appointment.ClientId.Should().Be(clientId);
-        result.ErrorMessage.Should().Be(ClientScheduledMessage);
+        result.ErrorMessage.Should().Be(ALREADY_CLIENT_SCHEDULE);
         result.ErrorCode.Should().Be(ClientScheduledCode);
     }
 
