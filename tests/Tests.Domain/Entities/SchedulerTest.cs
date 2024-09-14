@@ -54,4 +54,25 @@ public class SchedulerTest
         scheduler.Weekday.Should().BeEquivalentTo(newWeekday);
         scheduler.ProfessionalId.Should().Be(newProfessionalId);
     }
+    
+    [Fact]
+    public void Should_AddAppointmentInScheduler()
+    {
+        var (_, _, weekend) = WeekendBuilder.Build();
+        var (_, _, weekday) = WeekdayBuilder.Build();
+
+        const long professionalId = 1;
+
+        var scheduler = new Scheduler(weekend, weekday, professionalId);
+        
+        scheduler.AddDayOff(new DayOff(DayOfWeek.Saturday));
+        scheduler.AddDayOff(new DayOff(DayOfWeek.Sunday));
+
+        scheduler.CreatedAt.Should().NotBeNull();
+        scheduler.UpdatedAt.Should().BeNull();
+        scheduler.DaysOff.Should().HaveCount(2);
+        scheduler.Weekend.Should().BeEquivalentTo(weekend);
+        scheduler.Weekday.Should().BeEquivalentTo(weekday);
+        scheduler.ProfessionalId.Should().Be(professionalId);
+    }
 }

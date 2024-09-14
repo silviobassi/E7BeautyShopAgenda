@@ -9,7 +9,7 @@ public class Scheduler : Entity
     public Weekday Weekday { get; private set; }
     public long ProfessionalId { get; private set; }
 
-    public Scheduler( Weekend weekend, Weekday weekday, long professionalId)
+    public Scheduler(Weekend weekend, Weekday weekday, long professionalId)
     {
         Weekend = weekend;
         Weekday = weekday;
@@ -24,5 +24,10 @@ public class Scheduler : Entity
         Weekday = newWeekday;
         ProfessionalId = newProfessionalId;
         UpdatedAt = DateTimeOffset.UtcNow;
+    }
+
+    public void AddDayOff(DayOff dayOff)
+    {
+        DaysOff = DaysOff.Append(dayOff);
     }
 }
