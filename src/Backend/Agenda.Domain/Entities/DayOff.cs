@@ -1,14 +1,14 @@
 ﻿namespace Agenda.Domain.Entities;
 
-public sealed class DayRest : Entity
+public sealed class DayOff : Entity
 {
     public DayOfWeek? DayOnWeek { get; private set; }
 
-    public DayRest()
+    public DayOff()
     {
     }
 
-    public DayRest(DayOfWeek dayOnWeek)
+    public DayOff(DayOfWeek dayOnWeek)
     {
         DayOnWeek = dayOnWeek;
         CreatedAt = DateTime.Now;
