@@ -1,5 +1,6 @@
 using Agenda.Domain.ValueObjects;
 using FluentAssertions;
+using Test.CommonUtilities.ValueObjects;
 
 namespace Tests.Domain.ObjectValues;
 
@@ -8,8 +9,7 @@ public class WeekendTest
     [Fact]
     public void Should_CreateWeekendInstance()
     {
-        var startAt = new TimeSpan(8, 0, 0);
-        var endAt = new TimeSpan(12, 0, 0);
+        var (startAt, endAt, _) = WeekendBuilder.Build();
 
         var weekend = new Weekend(startAt, endAt);
 

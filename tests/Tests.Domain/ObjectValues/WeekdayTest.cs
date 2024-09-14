@@ -1,5 +1,6 @@
 ﻿using Agenda.Domain.ValueObjects;
 using FluentAssertions;
+using Test.CommonUtilities.ValueObjects;
 
 namespace Tests.Domain.ObjectValues;
 
@@ -8,8 +9,7 @@ public class WeekdayTest
     [Fact]
     public void Should_CreateWeekdayInstance()
     {
-        var startAt = new TimeSpan(8, 0, 0);
-        var endAt = new TimeSpan(12, 0, 0);
+        var (startAt, endAt, _) = WeekdayBuilder.Build();
 
         var weekend = new Weekday(startAt, endAt);
 
