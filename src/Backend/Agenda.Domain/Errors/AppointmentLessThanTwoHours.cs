@@ -3,4 +3,4 @@
 namespace Agenda.Domain.Errors;
 
 public record AppointmentLessThanTwoHours()
-    : AppError(LESS_THAN_TWO_HOURS, ErrorType.BusinessRule, nameof(AppointmentLessThanTwoHours));
+    : DomainError(LESS_THAN_TWO_HOURS, ErrorType.BusinessRule, nameof(AppointmentLessThanTwoHours));

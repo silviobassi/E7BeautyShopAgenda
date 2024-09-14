@@ -3,4 +3,4 @@
 namespace Agenda.Domain.Errors;
 
 public record AlreadyClientSchedule()
-    : AppError(ALREADY_CLIENT_SCHEDULE, ErrorType.BusinessRule, nameof(AlreadyClientSchedule));
+    : DomainError(ALREADY_CLIENT_SCHEDULE, ErrorType.BusinessRule, nameof(AlreadyClientSchedule));
