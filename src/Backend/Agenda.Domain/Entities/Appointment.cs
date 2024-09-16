@@ -6,29 +6,33 @@ namespace Agenda.Domain.Entities;
 
 public class Appointment : Entity
 {
-    public DateTimeOffset AppointmentHours { get; private set; }
-    public bool Active { get; private set; }
+    public DateTimeOffset AppointmentHour { get; private set; }
     public bool Available { get; private set; }
     public int Duration { get; private set; }
     public long ClientId { get; private set; }
 
+    public long ProfessionalId { get; private set; }
+
+    private IEnumerable<DayOff> DayOffs { get; } = [];
+
     private readonly List<IDomainEvent> _domainEvents = [];
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
-    public Appointment(DateTimeOffset appointmentHours, int duration)
+    public Appointment(DateTimeOffset appointmentHour, int duration, long professionalId)
     {
-        AppointmentHours = appointmentHours;
-        Active = true;
-        Available = true;
+        AppointmentHour = appointmentHour;
         Duration = duration;
+        ProfessionalId = professionalId;
+        Available = true;
         CreatedAt = DateTimeOffset.UtcNow;
     }
 
-    public void Update(long id, DateTimeOffset newStartAt, int newDuration)
+    public void Update(long id, DateTimeOffset newStartAt, int newDuration, long professionalId)
     {
         Id = id;
-        AppointmentHours = newStartAt;
+        AppointmentHour = newStartAt;
         Duration = newDuration;
+        ProfessionalId = professionalId;
         UpdatedAt = DateTimeOffset.UtcNow;
     }
 
@@ -37,7 +41,7 @@ public class Appointment : Entity
         if (IsClientSchedule) return new AlreadyClientSchedule();
         UpdateScheduleState(clientId: clientId, available: false);
         RegisterEvent(timeReservedEvent);
-        return Ok();
+        return Success();
     }
 
     public Result Cancel(TimeCanceledEvent timeCanceledEvent)
@@ -47,7 +51,7 @@ public class Appointment : Entity
 
         UpdateScheduleState();
         RegisterEvent(timeCanceledEvent);
-        return Ok();
+        return Success();
     }
 
     public void ClearDomainEvents() => _domainEvents.Clear();
@@ -56,7 +60,7 @@ public class Appointment : Entity
 
     private bool IsNotClientSchedule => !IsClientSchedule;
 
-    private bool IsLessThanTwoHoursBefore => AppointmentHours.Subtract(DateTimeOffset.UtcNow).TotalHours < 2;
+    private bool IsLessThanTwoHoursBefore => AppointmentHour.Subtract(DateTimeOffset.UtcNow).TotalHours < 2;
 
     private void UpdateScheduleState(long clientId = 0L, bool available = true)
     {
