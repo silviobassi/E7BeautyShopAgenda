@@ -61,7 +61,7 @@ namespace Agenda.Domain.Errors {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is already a client scheduled for this time..
+        ///   Looks up a localized string similar to There is already a client scheduled for this AppointmentHour..
         /// </summary>
         public static string ALREADY_CLIENT_SCHEDULE {
             get {
@@ -88,7 +88,7 @@ namespace Agenda.Domain.Errors {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is not a client scheduled for this time..
+        ///   Looks up a localized string similar to There is not a client scheduled for this AppointmentHour..
         /// </summary>
         public static string NO_CLIENT_SCHEDULE {
             get {

@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ALREADY_CLIENT_SCHEDULE" xml:space="preserve">
-    <value>There is already a client scheduled for this time.</value>
+    <value>There is already a client scheduled for this AppointmentHour.</value>
   </data>
   <data name="NO_CLIENT_SCHEDULE" xml:space="preserve">
-    <value>There is not a client scheduled for this time.</value>
+    <value>There is not a client scheduled for this AppointmentHour.</value>
   </data>
   <data name="LESS_THAN_TWO_HOURS" xml:space="preserve">
     <value>The appointment cannot be canceled less than 2 hours in advance.</value>
