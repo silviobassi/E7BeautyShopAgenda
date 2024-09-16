@@ -7,13 +7,14 @@ namespace Test.CommonUtilities.Entities;
 
 public abstract class CatalogBuilder
 {
-    public static  (long id, CatalogDescription description) Build()
+    public static  (long id, CatalogDescription description, Catalog? catalog) Build()
     {
         var faker = new Faker();
         var id = faker.Random.Long(0, 1000);
         var (name, price) = CatalogDescriptionBuilder.Build();
 
         var description = new CatalogDescription(name, price);
-        return (id, description);
+        var catalog = new Catalog(description);
+        return (id, description, catalog);
     }
 }

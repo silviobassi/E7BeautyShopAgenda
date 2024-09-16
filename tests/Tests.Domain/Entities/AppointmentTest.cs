@@ -1,6 +1,7 @@
 ﻿using Agenda.Domain.Entities;
 using Agenda.Domain.Errors;
 using Agenda.Domain.Events;
+using Agenda.Domain.ValueObjects;
 using FluentAssertions;
 using Test.CommonUtilities.Entities;
 using static Agenda.Domain.Errors.ResourceMessageError;
@@ -45,14 +46,16 @@ public class AppointmentTest
     public void Should_Success_CancelBusinessHour()
     {
         var (_, _, duration) = AppointmentBuilder.Build();
+        var (_, _, catalog) = CatalogBuilder.Build();
         const long clientId = 1L;
 
         var twoHoursAfter = DateTimeOffset.UtcNow.AddMinutes(121);
 
         Appointment appointment = new(twoHoursAfter, duration);
 
-        TimeReservedEvent timeReservedEvent = new (appointment.AppointmentHour, appointment.Duration, clientId);
-        appointment.Schedule(timeReservedEvent, clientId);
+        TimeReservedEvent timeReservedEvent = new(appointment.AppointmentHour, appointment.Duration, clientId);
+
+        appointment.Schedule(timeReservedEvent, catalog, clientId);
 
         appointment.ClientId.Should().Be(clientId);
 
@@ -63,6 +66,7 @@ public class AppointmentTest
 
         appointment.Available.Should().BeTrue();
         appointment.ClientId.Should().Be(0);
+        appointment.Catalog.Should().BeNull();
         appointment.DomainEvents.Should().HaveCount(2);
     }
 
@@ -71,13 +75,14 @@ public class AppointmentTest
     public void Should_Fail_CancelBusinessHour_When_ThereIsNo_Scheduling()
     {
         var (_, _, duration) = AppointmentBuilder.Build();
+        var (_, _, catalog) = CatalogBuilder.Build();
         const long clientId = 1L;
         var twoHoursAfter = DateTimeOffset.UtcNow.AddMinutes(120);
 
         Appointment appointment = new(twoHoursAfter, duration);
 
-        TimeReservedEvent timeReservedEvent = new (appointment.AppointmentHour, appointment.Duration, clientId);
-        appointment.Schedule(timeReservedEvent, clientId);
+        TimeReservedEvent timeReservedEvent = new(appointment.AppointmentHour, appointment.Duration, clientId);
+        appointment.Schedule(timeReservedEvent, catalog, clientId);
 
         appointment.ClientId.Should().Be(clientId);
 
@@ -85,10 +90,11 @@ public class AppointmentTest
             new(appointment.AppointmentHour, appointment.Duration, appointment.ClientId, "Vou ao médico");
 
         var result = appointment.Cancel(timeCanceledEvent);
-        
+
         appointment.Available.Should().BeFalse();
         appointment.ClientId.Should().Be(clientId);
         appointment.DomainEvents.Should().ContainSingle();
+        appointment.Catalog.Should().NotBeNull();
         result.Error?.Detail.Should().Be(LESS_THAN_TWO_HOURS);
         result.Error?.ErrorType.Should().Be(ErrorType.BusinessRule);
         result.Error?.ErrorTypeName.Should().Be(nameof(AppointmentLessThanTwoHours));
@@ -117,51 +123,83 @@ public class AppointmentTest
     public void Should_Success_ScheduleBusinessHour()
     {
         var (_, appointmentHour, duration) = AppointmentBuilder.Build();
+        var (_, _, catalog) = CatalogBuilder.Build();
         const long clientId = 1L;
 
         Appointment appointment = new(appointmentHour, duration);
 
-        TimeReservedEvent timeReservedEvent = new(appointment.AppointmentHour, appointment.Duration, appointment.ClientId);
-        var result = appointment.Schedule(timeReservedEvent,clientId);
+        TimeReservedEvent timeReservedEvent =
+            new(appointment.AppointmentHour, appointment.Duration, appointment.ClientId);
+        var result = appointment.Schedule(timeReservedEvent, catalog, clientId);
 
         appointment.Available.Should().BeFalse();
         appointment.DomainEvents.Should().ContainSingle();
         appointment.ClientId.Should().Be(clientId);
+        appointment.Catalog.Should().Be(catalog);
         result.Error.Should().BeNull();
-       
+
     }
 
     [Fact]
-    public void Should_Fail_ScheduleBusinessHour()
+    public void Should_Fail_ScheduleAppointmentHour()
     {
         var (_, appointmentHour, duration) = AppointmentBuilder.Build();
         const long clientId = 1L;
+        var (_, _, catalog) = CatalogBuilder.Build();
 
         Appointment appointment = new(appointmentHour, duration);
 
-        TimeReservedEvent timeReservedEvent = new(appointment.AppointmentHour, appointment.Duration, appointment.ClientId);
-        appointment.Schedule(timeReservedEvent, clientId);
-        var result = appointment.Schedule(timeReservedEvent, clientId);
+        TimeReservedEvent timeReservedEvent =
+            new(appointment.AppointmentHour, appointment.Duration, appointment.ClientId);
+
+        appointment.Schedule(timeReservedEvent, catalog, clientId);
+
+        var result = appointment.Schedule(timeReservedEvent, catalog, clientId);
 
         appointment.Available.Should().BeFalse();
         appointment.ClientId.Should().Be(clientId);
         appointment.DomainEvents.Should().ContainSingle();
+        appointment.Catalog.Should().NotBeNull();
         result.Error?.Detail.Should().Be(ALREADY_CLIENT_SCHEDULE);
         result.Error?.ErrorType.Should().Be(ErrorType.BusinessRule);
         result.Error?.ErrorTypeName.Should().Be(nameof(AlreadyClientSchedule));
     }
 
     [Fact]
-    public void Should_Clear_Events()
+    public void Should_Fail_ScheduleAppointmentHour_When_CatalogBeEmpty()
     {
         var (_, appointmentHour, duration) = AppointmentBuilder.Build();
         const long clientId = 1L;
 
         Appointment appointment = new(appointmentHour, duration);
 
-        TimeReservedEvent timeReservedEvent = new(appointment.AppointmentHour, appointment.Duration, appointment.ClientId);
-        appointment.Schedule(timeReservedEvent, clientId);
-        
+        TimeReservedEvent timeReservedEvent =
+            new(appointment.AppointmentHour, appointment.Duration, appointment.ClientId);
+
+        var result = appointment.Schedule(timeReservedEvent, null, clientId);
+
+        appointment.Available.Should().BeTrue();
+        appointment.ClientId.Should().Be(0L);
+        appointment.DomainEvents.Should().BeEmpty();
+        appointment.Catalog.Should().BeNull();
+        result.Error?.Detail.Should().Be(CATALOG_NOT_FOUND);
+        result.Error?.ErrorType.Should().Be(ErrorType.BusinessRule);
+        result.Error?.ErrorTypeName.Should().Be(nameof(CatalogNotFound));
+    }
+
+    [Fact]
+    public void Should_Clear_Events()
+    {
+        var (_, appointmentHour, duration) = AppointmentBuilder.Build();
+        var (_, _, catalog) = CatalogBuilder.Build();
+        const long clientId = 1L;
+
+        Appointment appointment = new(appointmentHour, duration);
+
+        TimeReservedEvent timeReservedEvent =
+            new(appointment.AppointmentHour, appointment.Duration, appointment.ClientId);
+        appointment.Schedule(timeReservedEvent, catalog, clientId);
+
         appointment.ClearDomainEvents();
 
         appointment.Available.Should().BeFalse();

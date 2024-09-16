@@ -11,6 +11,8 @@ public class Appointment : Entity
     public int Duration { get; private set; }
     public long ClientId { get; private set; }
 
+    public Catalog? Catalog { get; private set; }
+
     private readonly List<IDomainEvent> _domainEvents = [];
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
@@ -30,10 +32,11 @@ public class Appointment : Entity
         UpdatedAt = DateTimeOffset.UtcNow;
     }
 
-    public Result Schedule(TimeReservedEvent timeReservedEvent, long clientId)
+    public Result Schedule(TimeReservedEvent timeReservedEvent, Catalog? catalog, long clientId)
     {
         if (IsClientSchedule) return new AlreadyClientSchedule();
-        UpdateScheduleState(clientId: clientId, available: false);
+        if (catalog is null) return new CatalogNotFound();
+        UpdateScheduleState(catalog: catalog, clientId: clientId, available: false);
         RegisterEvent(timeReservedEvent);
         return Success();
     }
@@ -56,9 +59,10 @@ public class Appointment : Entity
 
     private bool IsLessThanTwoHoursBefore => AppointmentHour.Subtract(DateTimeOffset.UtcNow).TotalHours < 2;
 
-    private void UpdateScheduleState(long clientId = 0L, bool available = true)
+    private void UpdateScheduleState(Catalog? catalog = default, long clientId = 0L, bool available = true)
     {
         ClientId = clientId;
+        Catalog = catalog;
         Available = available;
     }
 

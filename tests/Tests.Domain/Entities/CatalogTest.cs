@@ -10,8 +10,8 @@ public class CatalogTest
     [Fact]
     public void Should_CreatingCatalogInstance()
     {
-        var (_, description) = CatalogBuilder.Build();
-        
+        var (_, description, _) = CatalogBuilder.Build();
+
         Catalog catalog = new(description);
 
         catalog.Should().NotBeNull();
@@ -19,19 +19,19 @@ public class CatalogTest
         catalog.GetName.Should().Be(description.Name);
         catalog.GetPrice.Should().Be(description.Price);
     }
-    
+
     [Fact]
     public void Should_UpdatingCatalogInstance()
     {
-        var (id, description) = CatalogBuilder.Build();
-        
+        var (id, description, _) = CatalogBuilder.Build();
+
         Catalog catalog = new(description);
-        
+
         const string corteDeCabeloSobrancelhaBarba = "Corte de Cabelo + sobrancelha + Barba";
         const int expectedPrice = 100;
-        
+
         catalog.Update(id, new CatalogDescription(corteDeCabeloSobrancelhaBarba, expectedPrice));
-        
+
         catalog.Should().NotBeNull();
 
         catalog.CreatedAt.Should().NotBeNull();

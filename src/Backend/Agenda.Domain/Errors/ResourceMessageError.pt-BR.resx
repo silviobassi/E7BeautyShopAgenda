@@ -129,4 +129,7 @@
   <data name="APPOINTMENT_CANNOT_DAY_OFF" xml:space="preserve">
     <value>O horário não pode ser cancelado com menos de 2 horas de antecedência.</value>
   </data>
+  <data name="CATALOG_NOT_FOUND" xml:space="preserve">
+    <value>O catálogo não pode ser vazio.</value>
+  </data>
 </root>

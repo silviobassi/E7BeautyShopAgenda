@@ -79,6 +79,15 @@ namespace Agenda.Domain.Errors {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The catalog cannot be empty..
+        /// </summary>
+        public static string CATALOG_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("CATALOG_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The appointment cannot be canceled less than 2 hours in advance..
         /// </summary>
         public static string LESS_THAN_TWO_HOURS {
