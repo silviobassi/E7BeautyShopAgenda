@@ -2,17 +2,17 @@
 
 public class Result
 {
-    public bool Success { get; }
+    public bool IsSuccess { get; }
 
     public DomainError? Error { get; }
     
-    private Result(bool success, DomainError? error)
+    private Result(bool isSuccess, DomainError? error)
     {
-        Success = success;
+        IsSuccess = isSuccess;
         Error = error;
     }
 
-    public static Result Ok() => new(true, null);
+    public static Result Success() => new(true, null);
     public static implicit operator Result(DomainError error) => Fail(error);
     private static Result Fail(DomainError error) => new(false, error);
 }
