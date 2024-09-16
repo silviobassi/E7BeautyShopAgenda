@@ -24,12 +24,32 @@ public class AppointmentTest
     }
 
     [Fact]
-    public void Should_UpdateBusinessHourInstance()
+    public void Should_CreatingAppointmentHourInstance_When_DayOff()
+    {
+        var (_, _, duration, professionalId) = AppointmentBuilder.Build();
+
+        var monday = new DateTimeOffset(2024, 9, 16, 0, 0, 0, TimeSpan.Zero);
+
+        Appointment appointment = new(monday, duration, professionalId);
+
+        appointment.AddDayOff(new DayOff(DayOfWeek.Monday));
+        appointment.AddDayOff(new DayOff(DayOfWeek.Tuesday));
+
+        appointment.CreatedAt.Should().NotBeNull();
+        appointment.ProfessionalId.Should().Be(professionalId);
+        appointment.AppointmentHour.Should().Be(monday);
+        appointment.Duration.Should().Be(0);
+        appointment.Available.Should().BeFalse();
+        appointment.IsOffDay.Should().BeTrue();
+    }
+    
+    [Fact]
+    public void Should_UpdateAppointmentHourInstance()
     {
         var (id, startAt, duration, professionalId) = AppointmentBuilder.Build();
 
         Appointment appointment = new(startAt, duration, professionalId);
-
+        
         var newStartAt = startAt.AddDays(1);
         const int newDuration = 45;
 
@@ -39,7 +59,33 @@ public class AppointmentTest
         appointment.UpdatedAt.Should().NotBeNull();
         appointment.AppointmentHour.Should().Be(newStartAt);
         appointment.Available.Should().BeTrue();
+        appointment.IsOffDay.Should().BeFalse();
         appointment.Duration.Should().Be(newDuration);
+        appointment.ProfessionalId.Should().Be(professionalId);
+    }
+
+    [Fact]
+    public void Should_UpdateAppointmentHourInstance_When_DayOff()
+    {
+        var (id, startAt, duration, professionalId) = AppointmentBuilder.Build();
+        var monday = new DateTimeOffset(2024, 9, 16, 0, 0, 0, TimeSpan.Zero);
+        
+        Appointment appointment = new(startAt, duration, professionalId);
+        
+        const int newDuration = 45;
+
+        appointment.Update(id, monday, newDuration, professionalId);
+
+        appointment.AddDayOff(new DayOff(DayOfWeek.Monday));
+        appointment.AddDayOff(new DayOff(DayOfWeek.Tuesday));
+        
+        appointment.CreatedAt.Should().NotBeNull();
+        appointment.UpdatedAt.Should().NotBeNull();
+        appointment.AppointmentHour.Should().Be(monday);
+        appointment.IsOffDay.Should().BeTrue();
+        appointment.Duration.Should().Be(0);
+        appointment.Available.Should().BeFalse();
+        appointment.IsOffDay.Should().BeTrue();
         appointment.ProfessionalId.Should().Be(professionalId);
     }
 
@@ -141,10 +187,10 @@ public class AppointmentTest
     [Fact]
     public void Should_Fail_ScheduleBusinessHour()
     {
-        var (_, startAt, duration,professionalId) = AppointmentBuilder.Build();
+        var (_, startAt, duration, professionalId) = AppointmentBuilder.Build();
         const long clientId = 1L;
 
-        Appointment appointment = new(startAt, duration,professionalId);
+        Appointment appointment = new(startAt, duration, professionalId);
 
         TimeReservedEvent timeReservedEvent =
             new(appointment.AppointmentHour, appointment.Duration, appointment.ClientId);
@@ -163,10 +209,10 @@ public class AppointmentTest
     [Fact]
     public void Should_Clear_Events()
     {
-        var (_, startAt, duration,professionalId) = AppointmentBuilder.Build();
+        var (_, startAt, duration, professionalId) = AppointmentBuilder.Build();
         const long clientId = 1L;
 
-        Appointment appointment = new(startAt, duration,professionalId);
+        Appointment appointment = new(startAt, duration, professionalId);
 
         TimeReservedEvent timeReservedEvent =
             new(appointment.AppointmentHour, appointment.Duration, appointment.ClientId);
