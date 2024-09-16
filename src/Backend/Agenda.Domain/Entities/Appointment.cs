@@ -32,11 +32,10 @@ public class Appointment : Entity
         UpdatedAt = DateTimeOffset.UtcNow;
     }
 
-    public Result Schedule(TimeReservedEvent timeReservedEvent, Catalog? catalog, long clientId)
+    public Result Schedule(TimeReservedEvent timeReservedEvent, Catalog catalog, long clientId)
     {
         if (IsClientSchedule) return new AlreadyClientSchedule();
-        if (catalog is null) return new CatalogNotFound();
-        UpdateScheduleState(catalog: catalog, clientId: clientId, available: false);
+        UpdateScheduleState(clientId: clientId, available: false);
         RegisterEvent(timeReservedEvent);
         return Success();
     }
