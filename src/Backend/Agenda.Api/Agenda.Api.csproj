@@ -11,10 +11,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\Shared\Agenda.Communication\Agenda.Communication.csproj" />
       <ProjectReference Include="..\..\Shared\Agenda.Error\Agenda.Error.csproj" />
       <ProjectReference Include="..\Agenda.Application\Agenda.Application.csproj" />

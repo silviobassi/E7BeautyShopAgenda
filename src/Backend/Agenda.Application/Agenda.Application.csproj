@@ -19,4 +19,8 @@
       <ProjectReference Include="..\..\Shared\Agenda.Communication\Agenda.Communication.csproj" />
       <ProjectReference Include="..\..\Shared\Agenda.Error\Agenda.Error.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Queries\" />
+    </ItemGroup>
 </Project>

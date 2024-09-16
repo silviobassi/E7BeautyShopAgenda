@@ -1,25 +1,30 @@
-﻿using Agenda.Domain.ValueObjects;
+﻿using System.Runtime.InteropServices.JavaScript;
+using Agenda.Domain.ValueObjects;
 
 namespace Agenda.Domain.Entities;
 
 public sealed class Catalog : Entity
 {
-    private CatalogDescription? Description { get; set; }
+    public string DescriptionName { get; private set; } = string.Empty;
 
-    public Catalog(CatalogDescription description)
+    public decimal DescriptionPrice { get; private set; }
+    
+    public Catalog()
     {
-        Description = description;
+    }
+
+    public Catalog(CatalogDescription? description)
+    {
+        DescriptionName = description!.Name;
+        DescriptionPrice = description.Price;
         CreatedAt = DateTimeOffset.UtcNow;
     }
 
     public void Update(long id, CatalogDescription newDescription)
     {
         Id = id;
-        Description = newDescription;
+        DescriptionName = newDescription!.Name;
+        DescriptionPrice = newDescription.Price;
         UpdatedAt = DateTimeOffset.UtcNow;
     }
-
-    public string? GetName => Description?.Name;
-
-    public decimal? GetPrice => Description?.Price;
 }

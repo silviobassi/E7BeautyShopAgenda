@@ -4,6 +4,5 @@ namespace Agenda.Infrastructure.Services;
 
 public interface ISqlService
 {
-    Task ExecuteQuery(string query);
-    Task<SqlDataReader> ExecuteSelectQuery(string query);
+    Task<SqlDataReader> ExecuteSelectQueryAsync(string query);
 }

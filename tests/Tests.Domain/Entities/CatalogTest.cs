@@ -16,8 +16,8 @@ public class CatalogTest
 
         catalog.Should().NotBeNull();
         catalog.CreatedAt.Should().BeAfter(DateTimeOffset.MinValue);
-        catalog.GetName.Should().Be(description.Name);
-        catalog.GetPrice.Should().Be(description.Price);
+        catalog.DescriptionName.Should().Be(description.Name);
+        catalog.DescriptionPrice.Should().Be(description.Price);
     }
 
     [Fact]
@@ -36,9 +36,9 @@ public class CatalogTest
 
         catalog.CreatedAt.Should().NotBeNull();
         catalog.UpdatedAt.Should().NotBeNull();
-        catalog.GetName.Should().NotBe(description.Name);
-        catalog.GetPrice.Should().NotBe(description.Price);
-        catalog.GetName.Should().Be(corteDeCabeloSobrancelhaBarba);
-        catalog.GetPrice.Should().Be(expectedPrice);
+        catalog.DescriptionName.Should().NotBe(description.Name);
+        catalog.DescriptionPrice.Should().NotBe(description.Price);
+        catalog.DescriptionName.Should().Be(corteDeCabeloSobrancelhaBarba);
+        catalog.DescriptionPrice.Should().Be(expectedPrice);
     }
 }

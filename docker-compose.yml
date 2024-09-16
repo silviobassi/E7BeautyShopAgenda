@@ -1,0 +1,13 @@
+services:
+  SqlServer:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: SqlServerE7Beauty
+    environment:
+      SA_PASSWORD: "12345678dev_#"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+volumes:
+  sqlserver_data:

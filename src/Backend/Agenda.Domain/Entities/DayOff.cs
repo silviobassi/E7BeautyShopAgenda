@@ -3,6 +3,7 @@
 public sealed class DayOff : Entity
 {
     public DayOfWeek? DayOnWeek { get; private set; }
+    public long SchedulerId { get; set; }
 
     public DayOff()
     {
@@ -11,13 +12,13 @@ public sealed class DayOff : Entity
     public DayOff(DayOfWeek dayOnWeek)
     {
         DayOnWeek = dayOnWeek;
-        CreatedAt = DateTime.Now;
+        CreatedAt = DateTime.UtcNow;
     }
 
     public void Update(long id, DayOfWeek dayOnWeek)
     {
         Id = id;
         DayOnWeek = dayOnWeek;
-        UpdatedAt = DateTime.Now;
+        UpdatedAt = DateTime.UtcNow;
     }
 }

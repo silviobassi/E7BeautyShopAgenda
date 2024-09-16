@@ -1,6 +1,22 @@
-@Agenda.Api_HostAddress = http://localhost:5167
+POST https://localhost:44302/Scheduler/
+Content-Type: application/json
 
-GET {{Agenda.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
+{
+  "startAtSchedule": "2024-09-20T06:04:12.410Z",
+  "endAtSchedule": "2024-12-21T06:04:12.410Z",
+  "startAtWeekend": "08:00:00",
+  "endAtWeekend": "11:00:00",
+  "startAtWeekday": "08:00:00",
+  "endAtWeekday": "13:00:00",
+  "duration": 30,
+  "daysOff": [
+    {
+      "dayOnWeek": 0
+    },
+    {
+      "dayOnWeek": 1
+    }
+  ],
+  "professionalId": 2
+}
 ###

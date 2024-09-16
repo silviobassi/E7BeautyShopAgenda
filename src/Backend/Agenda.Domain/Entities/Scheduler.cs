@@ -2,9 +2,13 @@
 
 public class Scheduler : Entity
 {
-    public IEnumerable<DayOff> DaysOff { get; private set; } = [];
-    public IEnumerable<Appointment> Appointments { get; private set; } = [];
+    public IList<DayOff> DaysOff { get; private set; } = [];
+    public IList<Appointment> Appointments { get; private set; } = [];
     public long ProfessionalId { get; private set; }
+
+    public Scheduler()
+    {
+    }
 
     public Scheduler(long professionalId)
     {
@@ -19,14 +23,7 @@ public class Scheduler : Entity
         UpdatedAt = DateTimeOffset.UtcNow;
     }
 
-    public void AddDayOff(DayOff dayOff) => DaysOff = DaysOff.Append(dayOff);
+    public void AddDayOff(DayOff dayOff) => DaysOff.Add(dayOff);
 
-    public void AddAppointment(Appointment appointment)
-    {
-        if (IsDayOff(appointment)) return;
-        Appointments = Appointments.Append(appointment);
-    }
-
-    private bool IsDayOff(Appointment appointment)
-        => DaysOff.ToList().Exists(dayOff => dayOff.DayOnWeek == appointment.AppointmentHour.DayOfWeek);
+    public void AddAppointment(Appointment appointment) => Appointments.Add(appointment);
 }

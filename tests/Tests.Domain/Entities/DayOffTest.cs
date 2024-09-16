@@ -9,7 +9,7 @@ public class DayOffTest
     [Fact]
     public void Should_CreatingDayRestInstance()
     {
-        var (_, dayOfWeek) = DayRestBuilder.Build();
+        var (_, dayOfWeek) = DayOffBuilder.Build();
 
         DayOff dayOff = new(dayOfWeek);
 
@@ -20,7 +20,7 @@ public class DayOffTest
     [Fact]
     public void Should_UpdatingDayRestInstance()
     {
-        var (id, dayOfWeek) = DayRestBuilder.Build();
+        var (id, dayOfWeek) = DayOffBuilder.Build();
 
         DayOff dayOff = new(dayOfWeek);
 

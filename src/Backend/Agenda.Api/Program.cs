@@ -1,10 +1,15 @@
+using Agenda.Api.Converters;
+using Agenda.Application;
 using Agenda.Infrastructure;
 using Agenda.Infrastructure.Extensions;
 using Agenda.Infrastructure.Migrations;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new StringConverter()));
 // Add services to the container.
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
