@@ -18,7 +18,7 @@ public class Appointment : Entity
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
 
-    public Appointment()
+    private Appointment()
     {
     }
 

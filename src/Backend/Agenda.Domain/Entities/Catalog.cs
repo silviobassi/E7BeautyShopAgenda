@@ -9,7 +9,7 @@ public sealed class Catalog : Entity
 
     public decimal DescriptionPrice { get; private set; }
     
-    public Catalog()
+    private Catalog()
     {
     }
 

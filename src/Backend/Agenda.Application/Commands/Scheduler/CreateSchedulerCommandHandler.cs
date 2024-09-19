@@ -1,7 +1,11 @@
-﻿using Agenda.Communication.Commands.Scheduler;
+﻿using Agenda.Application.Extensions;
+using Agenda.Application.Services;
+using Agenda.Communication.Commands.Scheduler;
 using Agenda.Domain.Entities;
 using Agenda.Domain.Extensions;
 using Agenda.Domain.Repositories;
+using Agenda.Error;
+using OneOf;
 
 namespace Agenda.Application.Commands.Scheduler;
 
@@ -9,15 +13,23 @@ public class CreateSchedulerCommandHandler(
     ISchedulerRepository schedulerRepository,
     IAppointmentRepository appointmentRepository,
     IDayOffRepository dayOffRepository,
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork
+)
     : ICreateSchedulerCommandHandler
 {
-    public async Task Handle(CreateSchedulerCommand command)
+    public async Task<OneOf<CreateSchedulerCommandResult, AppError>> Handle(CreateSchedulerCommand command)
     {
+        var result = await ValidateAsync(command);
+
+        if (result.IsError())
+            return result.GetError();
+
         Domain.Entities.Scheduler scheduler = command;
-        
-        AddDaysOffToSchedule(command, scheduler);
-        AddAppointmentListToSchedule(command, scheduler);
+
+        var processor = new SchedulerProcessorService(command, scheduler);
+
+        processor.ProcessSchedule();
+        processor.ProcessAppointmentInSchedule();
 
         await schedulerRepository.CreateAsync(scheduler);
 
@@ -29,40 +41,16 @@ public class CreateSchedulerCommandHandler(
         unitOfWork.AutoDetectChangesEnabled(true);
 
         await unitOfWork.CommitAsync();
+        return new CreateSchedulerCommandResult(scheduler.Id);
     }
 
-    private static void AddAppointmentListToSchedule(CreateSchedulerCommand command, Domain.Entities.Scheduler scheduler)
+    private static async Task<OneOf<bool, AppError>> ValidateAsync(CreateSchedulerCommand command)
     {
-        for (var date = command.StartAtSchedule.Date; date <= command.EndAtSchedule.Date; date = date.AddDays(1))
-        {
-            if (date.IsDayOffAt(scheduler.DaysOff)) continue;
-            AddAppointmentToSchedule(command, date, scheduler);
-        }
-    }
+        var validator = new CreateSchedulerCommandValidator();
+        var result = await validator.ValidateAsync(command);
 
-    private static void AddDaysOffToSchedule(CreateSchedulerCommand command, Domain.Entities.Scheduler scheduler)
-    {
-        foreach (var dayOffCommand in command.DaysOff)
-        {
-            DayOff dayOff = dayOffCommand;
-            dayOff.SchedulerId = scheduler.Id;
-            scheduler.AddDayOff(dayOff);
-        }
-    }
-
-    private static void AddAppointmentToSchedule(CreateSchedulerCommand command, DateTime date,
-        Domain.Entities.Scheduler scheduler)
-    {
-        var startAt = date.IsWeekday() ? command.StartAtWeekday : command.StartAtWeekend;
-        var endAt = date.IsWeekday() ? command.EndAtWeekday : command.EndAtWeekend;
-
-        for (var hour = startAt; hour <= endAt; hour = hour.Add(TimeSpan.FromMinutes(command.Duration)))
-        {
-            var appointment = new Appointment(date.Add(hour), command.Duration)
-            {
-                SchedulerId = scheduler.Id,
-            };
-            scheduler.AddAppointment(appointment);
-        }
+        if (!result.IsValid.IsFalse()) return false;
+        var errorMessages = result.Errors.Select(error => error.ErrorMessage).ToList();
+        return new ErrorOnValidation(errorMessages);
     }
 }

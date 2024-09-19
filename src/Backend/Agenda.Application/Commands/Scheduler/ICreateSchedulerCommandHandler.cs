@@ -1,8 +1,10 @@
 ﻿using Agenda.Communication.Commands.Scheduler;
+using Agenda.Error;
+using OneOf;
 
 namespace Agenda.Application.Commands.Scheduler;
 
 public interface ICreateSchedulerCommandHandler
 {
-    Task Handle(CreateSchedulerCommand command);
+    Task<OneOf<CreateSchedulerCommandResult, AppError>> Handle(CreateSchedulerCommand command);
 }

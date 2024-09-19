@@ -6,7 +6,7 @@ public class Scheduler : Entity
     public IList<Appointment> Appointments { get; private set; } = [];
     public long ProfessionalId { get; private set; }
 
-    public Scheduler()
+    private Scheduler()
     {
     }
 

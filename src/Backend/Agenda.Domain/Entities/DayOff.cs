@@ -5,7 +5,7 @@ public sealed class DayOff : Entity
     public DayOfWeek? DayOnWeek { get; private set; }
     public long SchedulerId { get; set; }
 
-    public DayOff()
+    private DayOff()
     {
     }
 
