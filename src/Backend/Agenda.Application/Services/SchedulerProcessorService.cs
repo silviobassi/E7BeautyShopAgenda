@@ -8,8 +8,6 @@ public class SchedulerProcessorService(CreateSchedulerCommand command)
 {
     public Scheduler Schedule { get; } = command;
     public long ScheduleId => Schedule.Id;
-    public IList<DayOff> DaysOff => Schedule.DaysOff;
-    public IList<Appointment> Appointments => Schedule.Appointments;
 
     public void Process()
     {
@@ -36,4 +34,7 @@ public class SchedulerProcessorService(CreateSchedulerCommand command)
             Schedule.AddAppointment(appointment);
         }
     }
+
+    public IList<DayOff> DaysOff => Schedule.DaysOff;
+    public IList<Appointment> Appointments => Schedule.Appointments;
 }
