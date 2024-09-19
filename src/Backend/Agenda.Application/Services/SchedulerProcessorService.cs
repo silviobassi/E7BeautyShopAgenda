@@ -22,17 +22,6 @@ public class SchedulerProcessorService(CreateSchedulerCommand command)
         }
     }
 
-    /*public void ProcessAppointmentInSchedule()
-    {
-        for (var date = command.StartAtSchedule.Date;
-             date <= command.EndAtSchedule.Date;
-             date = date.AddDays(1))
-        {
-            if (date.IsDayOffAt(scheduler.DaysOff)) continue;
-            AddAppointmentToSchedule(date);
-        }
-    }*/
-
     private void AddAppointmentToSchedule(DateTime date)
     {
         var startAt = date.IsWeekday() ? command.StartAtWeekday : command.StartAtWeekend;
