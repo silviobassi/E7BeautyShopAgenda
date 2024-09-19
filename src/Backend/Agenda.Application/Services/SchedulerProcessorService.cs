@@ -17,7 +17,7 @@ public class SchedulerProcessorService(CreateSchedulerCommand command)
              date <= command.EndAtSchedule.Date;
              date = date.AddDays(1))
         {
-            if (date.IsDayOffAt(Schedule.DaysOff)) continue;
+            if (date.IsDayOffAt(DaysOff)) continue;
             AddAppointmentToSchedule(date);
         }
     }
