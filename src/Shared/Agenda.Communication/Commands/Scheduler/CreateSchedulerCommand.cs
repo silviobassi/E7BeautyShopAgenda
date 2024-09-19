@@ -2,22 +2,25 @@
 
 namespace Agenda.Communication.Commands.Scheduler;
 
-public sealed record CreateSchedulerCommand
+public sealed record CreateSchedulerCommand(
+    DateTimeOffset StartAtSchedule,
+    DateTimeOffset EndAtSchedule,
+    TimeSpan StartAtWeekend,
+    TimeSpan EndAtWeekend,
+    TimeSpan StartAtWeekday,
+    TimeSpan EndAtWeekday,
+    int Duration,
+    IList<CreateDayOffCommand> DaysOff,
+    long ProfessionalId
+)
 {
-    public DateTimeOffset StartAtSchedule { get; init; }
-    public DateTimeOffset EndAtSchedule { get; init; }
-    public TimeSpan StartAtWeekend { get; init; }
-    public TimeSpan EndAtWeekend { get; init; }
-    public TimeSpan StartAtWeekday { get; init; }
-    public TimeSpan EndAtWeekday { get; init; }
-    public int Duration { get; init; }
-    public IEnumerable<CreateDayOffCommand> DaysOff { get; init; } = [];
-    public long ProfessionalId { get; init; }
-
     public static implicit operator Domain.Entities.Scheduler(CreateSchedulerCommand? command)
     {
-        return command is null
-            ? command
-            : new Domain.Entities.Scheduler(command.ProfessionalId);
+        if (command is null) return command;
+
+        var scheduler = new Domain.Entities.Scheduler(command.ProfessionalId);
+        foreach (Domain.Entities.DayOff dayOff in command.DaysOff) scheduler.AddDayOff(dayOff);
+
+        return scheduler;
     }
 }
