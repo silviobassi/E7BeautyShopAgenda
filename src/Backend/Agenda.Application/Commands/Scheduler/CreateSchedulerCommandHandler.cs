@@ -40,7 +40,7 @@ public class CreateSchedulerCommandHandler(
         var validator = new CreateSchedulerCommandValidator();
         var result = await validator.ValidateAsync(command);
 
-        if (result.IsValid.IsTrue()) return false;
+        if (result.IsValid.IsTrue()) return true;
         var errorMessages = result.Errors.Select(error => error.ErrorMessage).ToList();
         return new ErrorOnValidation(errorMessages);
     }
