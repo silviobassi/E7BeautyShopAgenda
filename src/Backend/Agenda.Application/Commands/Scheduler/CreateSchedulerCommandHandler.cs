@@ -16,6 +16,15 @@ public class CreateSchedulerCommandHandler(
 )
     : ICreateSchedulerCommandHandler
 {
+    /// <summary>
+    /// Handles the creation of a scheduler based on the provided command.
+    /// </summary>
+    /// <param name="command">The command containing the scheduler details.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result contains
+    /// either a <see cref="CreateSchedulerCommandResult"/> if the operation is successful,
+    /// or an <see cref="AppError"/> if there is an error.
+    /// </returns>
     public async Task<OneOf<CreateSchedulerCommandResult, AppError>> Handle(CreateSchedulerCommand command)
     {
         var result = await ValidateAsync(command);

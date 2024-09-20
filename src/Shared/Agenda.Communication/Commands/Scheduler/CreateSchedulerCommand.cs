@@ -3,8 +3,8 @@
 namespace Agenda.Communication.Commands.Scheduler;
 
 public sealed record CreateSchedulerCommand(
-    DateTimeOffset StartAtSchedule,
-    DateTimeOffset EndAtSchedule,
+    DateOnly StartAtSchedule,
+    DateOnly EndAtSchedule,
     TimeSpan StartAtWeekend,
     TimeSpan EndAtWeekend,
     TimeSpan StartAtWeekday,

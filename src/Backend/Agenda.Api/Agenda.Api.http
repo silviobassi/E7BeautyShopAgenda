@@ -1,9 +1,9 @@
-POST https://localhost:7182/Scheduler/
+POST https://localhost:7182/scheduler/
 Content-Type: application/json
 
 {
-  "startAtSchedule": "2024-09-13T15:20:42+00:00",
-  "endAtSchedule": "2024-09-14T15:20:42+00:00",
+  "startAtSchedule": "2024-09-13",
+  "endAtSchedule": "2024-09-15",
   "startAtWeekend": "08:00:00",
   "endAtWeekend": "11:00:00",
   "startAtWeekday": "08:00:00",
@@ -11,7 +11,7 @@ Content-Type: application/json
   "duration": 30,
   "daysOff": [
     {
-      "dayOnWeek": 10
+      "dayOnWeek": 3
     },
     {
       "dayOnWeek": 1
